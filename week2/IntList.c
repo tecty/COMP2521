@@ -92,8 +92,44 @@ void IntListInsert(IntList L, int v)
 // insert an integer into correct place in a sorted list
 void IntListInsertInOrder(IntList L, int v)
 {
-	// This is INCORRECT
-	IntListInsert(L, v);
+	// // This is INCORRECT
+	// IntListInsert(L, v);
+
+    /* I could only do the insertion sort in this data structure :( */
+    if (L->first == NULL || L->last->data<= v) {
+        /* this list has nothing or the data can insert at last */
+        IntListInsert(L, v);
+    }
+    else if (L->first->data >= v ) {
+        /* the data can append at first */
+        // create the node
+        struct IntListNode *n = newIntListNode(v);
+        // insert this node as the first
+        n->next = L->first;
+        L->first = n;
+        // increment the size
+        L->size ++;
+    }
+    else {
+        /* the data must add at middle */
+        struct IntListNode *thisNode = L->first;
+        for (; thisNode->next != L->last; thisNode= thisNode->next) {
+            /* find the insert point at middle of the list */
+            if (thisNode->next->data>= v) {
+                /* here is the insertion point and break the loop */
+                break;
+            }
+        }
+        struct IntListNode *n = newIntListNode(v);
+        // inser this node
+        n->next = thisNode->next;
+        thisNode->next = n;
+        L->size ++;
+    }
+
+
+
+
 }
 
 // delete first occurrence of v from a list

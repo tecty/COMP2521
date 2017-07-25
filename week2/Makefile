@@ -1,6 +1,6 @@
 # COMP1927 13s1 Week 02 Lab
 
-CC=gcc
+CC=clang
 CFLAGS=-Wall -Werror
 
 all: usel randl
