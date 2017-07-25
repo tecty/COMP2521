@@ -1,0 +1,32 @@
+body {font-size:11pt;font-family:arial,sans-serif;margin:10px 20px;}
+a {color:#7788DD;text-decoration:none;}
+a.active {color:#7788DD;text-decoration:none;}
+a.inactive {color:#BBBBDD;text-decoration:none;}
+a[href]:hover {color:#CC0000;background:#FFFFCC;}
+small {font-size:75%}
+pre {background:#EEEEFF;border:thin solid #9999CC;margin:5px 20px 5px 20px;padding:4px 8px;}
+tt {font-size:12pt;}
+span.toggle {font-size:67%;}
+span.notice {font-size:110%;}
+span.tiny {font-size:75%;font-weight:normal;}
+span.heading {font-size:18pt;color:#7788DD;}
+span.subheading {font-size:16pt;color:#000000;font-weight:normal;}
+span.marks {font-weight:normal;font-size:75%;}
+span.identifier {color:#993300;font-size:110%;font-weight:bold;font-family:courier;}
+span.contentLink {font-weight:bold;font-size:110%}
+span.contentNote {font-weight:normal;font-size:85%;}
+tr.heading {font-size:large;font-weight:bold;background-color:#DDAA77;}
+table.note {border:thin solid black;padding:2pt;width:75%}
+div.note {border:thin solid black;font-size:90%;margin:5px 60px 5px 60px;padding:4px 8px;}
+dt.item {font-weight:bold;}
+h2 {font-size:16pt;font-weight:300;color:#7788DD;}
+h3 {font-size:14pt;font-weight:300;color:#7788DD;}
+.h2tt {font-size:17pt;font-weight:300;color:#7788DD;font-family:courier;}
+.h3tt {font-size:15pt;font-weight:300;color:#7788DD;font-family:courier;}
+.red {color:#BB0000;}
+.green {color:#006600;}
+.brown {color:#993300;}
+.grey {color:#AAAAAA;}
+.comment {font-size:90%;color:#666666}
+.important {font-weight:bold;color:#CC0000;}
+.bigQ {font-size:13pt;font-style:italic;}

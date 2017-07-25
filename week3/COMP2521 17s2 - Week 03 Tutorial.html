@@ -1,0 +1,573 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0070)http://cgi.cse.unsw.edu.au/~cs2521/17s2/tutes/week03/index.php?view=qo -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>COMP2521 17s2 - Week 03 Tutorial</title>
+<link rel="stylesheet" type="text/css" href="./COMP2521 17s2 - Week 03 Tutorial_files/course.css"><script language="JavaScript">
+function changeText(el, newText) {
+  // Safari work around
+  if (el.innerText)
+    el.innerText = newText;
+  else if (el.firstChild && el.firstChild.nodeValue)
+    el.firstChild.nodeValue = newText;
+}
+function toggleVisible(elid) {
+  el1 = document.getElementById(elid);
+  el2 = document.getElementById(elid+"a");
+  if (el1.style.display == "") {
+     el1.style.display = "none";
+     changeText(el2,"show answer");
+  }
+  else {
+     el1.style.display = "";
+     changeText(el2,"hide answer");
+  }
+}
+</script></head>
+<body>
+<div align="center">
+<table width="100%" border="0">
+<tbody><tr valign="top">
+<td align="left" width="25%">
+  <span class="tiny"><a href="http://www.cse.unsw.edu.au/~cs2521/17s2/index.php">COMP2521 17s2</a></span>
+</td>
+<td align="center" width="50%">
+  <span class="heading">Week 03 Tutorial</span><br>
+  <span class="subheading">ADTs, Bits, Debugging</span>
+</td>
+<td align="right" width="25%">
+  <span class="tiny"><a href="http://www.cse.unsw.edu.au/~cs2521/17s2/index.php">Data Structures and Algorithms</a></span>
+</td>
+</tr></tbody></table>
+</div>
+<h3>The <tt><big>Bag</big></tt> ADT</h3>
+<p>
+In lectures, we looked at an ADT for sets, we considered multiple
+representations for the data type, and we analysed the performance
+characteristics of each representation.
+Now consider a closely related data type:
+a <b>bag</b> is a collection of values, possibly with duplicates,
+e.g.
+</p>
+<pre>{1,1,2,3,4,4}    <comment>// could only be a Bag</comment>
+{1,2,3,4,5,6,7}  <comment>// could be a Bag or a Set</comment>
+{3,2,5,4,6,1,2}  <comment>// could only be a Bag</comment>
+{1,1,1}          <comment>// could only be a Bag</comment>
+</pre>
+<p>
+A <tt>Bag</tt> ADT has a similar interface to the <tt>Set</tt>
+ADT
+</p>
+<pre>typedef struct BagRep *Bag;
+void dropBag(Bag);
+Bag BagCopy(Bag);
+void BagInsert(Bag,int);
+void BagDelete(Bag,int);
+<span class="red">int BagMember(Bag,int);</span>
+Bag BagUnion(Bag,Bag);
+Bag BagIntersect(Bag,Bag);
+<span class="red">int BagNumElems(Bag);</span>
+<span class="red">int BagNumUniq(Bag);</span>
+void showBag(Bag);
+void readBag(FILE *, Bag);
+</pre>
+<p>
+There are three differences:
+</p>
+<ul>
+<li><p> the <tt>SetMember()</tt> function returned 0 or 1 to indicate
+the absence/presence of a value in the set;<br> the <tt>BagMember()</tt>
+function returns a count of how many times the value occurs in
+the bag
+</p></li>
+<li><p>
+the <tt>SetCard()</tt> function has been replaced by a pair of
+functions:
+</p><ul>
+<li> <tt>BagNumElems()</tt> returns a count of the number of values in the bag
+</li><li> <tt>BagNumUniq()</tt> returns a count of the number of distinct values in the bag
+</li></ul>
+<p></p></li>
+</ul>
+<p>
+In the above example bags, we observe the following:
+</p>
+<pre>{1,1,2,3,4,4}    <comment>// BagNumElems==6, BagNumUniq==4</comment>
+{1,2,3,4,5,6,7}  <comment>// BagNumElems==7, BagNumUniq==7</comment>
+{3,2,5,4,6,1,2}  <comment>// BagNumElems==7, BagNumUniq==6</comment>
+{1,1,1}          <comment>// BagNumElems==3, BagNumUniq==1</comment>
+</pre>
+
+<ol start="1">
+
+<br><li>
+<p>
+Consider how you might implement the <tt>Bag</tt> ADT as:
+</p>
+<ul>
+<li> an unsorted array of pre-defined size <tt>MAX_BAG</tt> </li>
+<li> an unsorted linked list </li>
+</ul>
+<p>
+For each of the above, consider variants where:
+</p>
+<ul>
+<li> values appear multiple times in the data structure <br>
+	(e.g. the same value in several list nodes or several array elements) </li>
+<li> each value appears only once, along with a count of how many occurrences it has </li>
+</ul>
+<p>
+For each of the four possibilities
+(array or linked list, value stored once or multiple times):
+</p>
+<ol type="a">
+<li><p>
+draw diagrams showing the data structure
+</p></li>
+<li><p>
+describe the algorithm and analyse the cost of each of the following operations:
+</p><ol type="i">
+<li> <tt>BagInsert(Bag, int)</tt>
+</li><li> <tt>BagMember(Bag, int)</tt>
+</li><li> <tt>BagNumElems(Bag)</tt>
+</li><li> <tt>BagNumUniq(Bag)</tt>
+</li></ol>
+</li></ol>
+
+
+</li>
+
+<li>
+<p>
+Imagine that the <tt>Bag</tt> representation was simply:
+</p>
+<pre>typedef struct BagRep *Bag;
+typedef struct Node *Link;
+typedef struct Node { int value; Link next; } Node;
+typedef struct BagRep { Node *list; } BagRep;
+</pre>
+<p>
+Write the function <tt>BagNumUniq()</tt> for this representation.
+</p>
+
+
+<br></li><li>
+<p>
+In the <tt>Set</tt> data type considered in lectures, we also looked at
+representations based on hashing and bit-strings.
+Could either of these representations be used for <tt>Bag</tt>s?
+If so, how? If not, why not?
+</p>
+
+</li>
+
+</ol>
+
+<h3>Bit Manipulation</h3>
+
+<ol start="4">
+
+<br><li>
+<p>
+If we have three 8-bit <tt>unsigned char</tt> variables, <tt>x</tt>,
+<tt>y</tt> and <tt>z</tt> with the following initial values:
+</p>
+<pre>x == 0xCC    y == 0x55     z == 0
+</pre>
+<p>
+then what is the value of <tt>z</tt> (as an 8-bit quantity)
+after each of the following statements:
+</p>
+<ol type="a">
+<li><pre>z = x &amp; y;</pre></li>
+<li><pre>z = x | y;</pre></li>
+<li><pre>z = x ^ y;</pre></li>
+<li><pre>z = ~x;</pre></li>
+<li><pre>z = ~y;</pre></li>
+<li><pre>z = x &lt;&lt; 1;</pre></li>
+<li><pre>z = x &gt;&gt; 1;</pre></li>
+<li><pre>z = y &amp; (~0x1);</pre></li>
+<li><pre>z = y &amp; (0x1 &lt;&lt; 3);</pre></li>
+<li><pre>z = (x &lt;&lt; 2) | (y &gt;&gt; 1);</pre></li>
+</ol>
+
+
+</li>
+
+<br><li>
+<p>
+Standard Unix/Linux libraries occasionally use bit-strings to represent
+set of properties. One common example is setting privileges on objects
+in the file system. The following, extracted and modified from the files
+<tt>bits/stat.h</tt> and <tt>sys/stat.h</tt> shows this:
+</p>
+<pre class="c" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// File types</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IFDIR (0040000)      // Directory</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IFREG (0100000)      // Regular file</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IFLNK (0120000)      // Symbolic link</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Protection bits</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IRUSR (0000400)       // Read by owner</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IWUSR (0000200)       // Write by owner</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IXUSR (0000100)       // Execute by owner</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IRGRP (S_IRUSR &gt;&gt; 3)  // Read by group</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IWGRP (S_IWUSR &gt;&gt; 3)  // Write by group</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IXGRP (S_IXUSR &gt;&gt; 3)  // Execute by group</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IROTH (S_IRGRP &gt;&gt; 3)  // Read by others</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IWOTH (S_IWGRP &gt;&gt; 3)  // Write by others</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define S_IXOTH (S_IXGRP &gt;&gt; 3)  // Execute by others</span></div></li></ol></pre><p>
+Note that above constants are in octal, not decimal or hexadecimal.
+</p>
+<p>
+For a regular file, the meaning of read and write is as expected.
+An executable regular file can be invoked like a program.
+For a directory, read permission allows you to list the contents
+of the directory (i.e. the <tt>ls</tt> command); write permission
+allows you to create files in the directory, or remove files that
+already exist; execute permission allows you to make the directory
+as your current directory (i.e. the <tt>cd</tt> command).
+</p><p>
+For each of the following scenarios, give an octal representation of
+a bit-string that would capture the relevant privileges:
+</p>
+<ol type="a">
+<li><p>a regular file that is only readable and writeable to its owner</p></li>
+<li><p>a regular file that is writeable to its owner, but readable by owner/group/anyone</p></li>
+<li><p>a regular file that is only executable to owner/group/anyone</p></li>
+<li><p>a directory that only the owner can read, create files in, or enter</p></li>
+<li><p>a directory that only the owner can create files in, but anyone can read/enter</p></li>
+<li><p>a directory that owner/group/anyone can read, create files in, or enter</p></li>
+</ol>
+
+
+</li>
+
+<br><li>
+<p>
+Using the definition of <tt>Word</tt> (32-bit unsigned quantity) from lectures:
+</p>
+<pre>typedef unsigned int Word;
+<span class="comment">// which on most systems could more accurately be defined as ...</span>
+typedef uint32_t Word;
+</pre>
+<p>
+Write a function <tt>showBits(w)</tt> that displays the individual bits
+in <tt>Word w</tt> on the standard output.
+Display the bits left-to-right from bit 31 down to bit 0.
+</p>
+
+
+</li>
+
+</ol>
+
+<h3>Debugging</h3>
+
+<p>
+Each of the following questions contains a buggy program.
+All of the programs compile (if you don't use <tt>-Wall -Werror</tt>*).
+Some execute to completion, but produce incorrect results.
+Others behave differently on different platforms: on some
+platforms they terminate because of run-time errors, on others they
+execute to completion but produce incorrect results, on others they
+may even produce correct results ... for some inputs.
+</p>
+<p>
+For each program ...
+</p>
+<ol type="a">
+<li> read the specification to find out what the program is supposed
+	 to be doing
+</li><li> examine the actual and expected results of executing the program
+</li><li> formulate a hypothesis that can explain how the incorrect output occurs
+</li><li> trace the execution of the (relevant parts of the) program to
+	check your hypothesis <br>
+	(in particular, trace the values of variables in the program)
+</li><li> describe what kinds of inputs will <em>not</em> reveal the error
+</li><li> describe what kinds of inputs will definitely reveal the error
+</li><li> suggest how the error can be repaired
+</li></ol>
+<p>
+In the input data below, <code>^D</code> is used to represent the end
+of the input (either EOF when reading from a file or the user typing
+control-D when entering data from the keyboard).
+</p>
+<p>
+* If you compile the examples using <tt>-Wall -Werror</tt>,
+in some cases the compiler will report the error.
+The fact that it costs you debugging time because of not using
+these flags ought to be a good incentive to <em>always</em> use them.
+</p>
+
+<ol start="7">
+
+<br><li>
+<p>Program:</p>
+<pre class="c" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Read numbers from stdin; print their sum on stdout</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdlib.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdio.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">int</span> main<span style="color: #009900;">(</span><span style="color: #993333;">int</span> argc<span style="color: #339933;">,</span> <span style="color: #993333;">char</span> <span style="color: #339933;">*</span>argv<span style="color: #009900;">[</span><span style="color: #009900;">]</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span> n<span style="color: #339933;">;</span>   <span style="color: #666666; font-style: italic;">// current value</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span> sum<span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// sum of values</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">while</span> <span style="color: #009900;">(</span><a href="http://www.opengroup.org/onlinepubs/009695399/functions/scanf.html"><span style="color: #000066;">scanf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"%d"</span><span style="color: #339933;">,&amp;</span>n<span style="color: #009900;">)</span> <span style="color: #339933;">==</span> <span style="color: #0000dd;">1</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		sum <span style="color: #339933;">+=</span> n<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"%d<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #339933;">,</span> sum<span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">return</span> EXIT_SUCCESS<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li></ol></pre><p>Test results:</p>
+<center>
+<table class="tests">
+<tbody><tr>
+ <th>Input</th>
+ <th>Expected Output</th>
+ <th>Observed Output</th>
+</tr>
+<tr valign="top">
+<td><pre>1
+2
+^D</pre>
+</td>
+<td><pre>3
+</pre></td>
+<td><pre>134518115</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>1 2 3 4 5
+^D</pre>
+</td>
+<td><pre>15</pre>
+</td>
+<td><pre>134518127</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>1 -1 2 -2 
+3 -3 4 -4
+5 -5 6 -6
+^D</pre>
+</td>
+<td><pre>0</pre>
+</td>
+<td><pre>134518112</pre>
+</td>
+</tr>
+</tbody></table>
+</center>
+
+ </li>
+
+<br><li>
+<p>Program:</p>
+<pre class="c" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Read lines from stdin; writes them to stdout</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Lines longer than 20 chars are truncated</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdio.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#define MAXLINE 20</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">int</span> main<span style="color: #009900;">(</span><span style="color: #993333;">int</span> argc<span style="color: #339933;">,</span> <span style="color: #993333;">char</span> <span style="color: #339933;">*</span>argv<span style="color: #009900;">[</span><span style="color: #009900;">]</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span>  i<span style="color: #339933;">;</span>              <span style="color: #666666; font-style: italic;">// index</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">char</span> line<span style="color: #009900;">[</span>MAXLINE<span style="color: #009900;">]</span><span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// string buffer</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span>  mygets<span style="color: #009900;">(</span><span style="color: #993333;">char</span> <span style="color: #339933;">*</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #666666; font-style: italic;">// initialise line buffer</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">for</span> <span style="color: #009900;">(</span>i <span style="color: #339933;">=</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span> i <span style="color: #339933;">&lt;</span> MAXLINE<span style="color: #339933;">;</span> i<span style="color: #339933;">++</span><span style="color: #009900;">)</span> line<span style="color: #009900;">[</span>i<span style="color: #009900;">]</span> <span style="color: #339933;">=</span> <span style="color: #ff0000;">'<span style="color: #006699; font-weight: bold;">\0</span>'</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #666666; font-style: italic;">// read and echo stdin, line by line</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">while</span> <span style="color: #009900;">(</span>mygets<span style="color: #009900;">(</span>line<span style="color: #009900;">)</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"%s<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #339933;">,</span> line<span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">return</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">int</span> mygets<span style="color: #009900;">(</span><span style="color: #993333;">char</span> <span style="color: #339933;">*</span>buf<span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span> c<span style="color: #339933;">,</span> i <span style="color: #339933;">=</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// c=input char, i=index</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">while</span> <span style="color: #009900;">(</span><span style="color: #009900;">(</span>c <span style="color: #339933;">=</span> <a href="http://www.opengroup.org/onlinepubs/009695399/functions/getchar.html"><span style="color: #000066;">getchar</span></a><span style="color: #009900;">(</span><span style="color: #009900;">)</span><span style="color: #009900;">)</span> <span style="color: #339933;">!=</span> EOF<span style="color: #009900;">)</span> <span style="color: #009900;">{</span>  <span style="color: #666666; font-style: italic;">// stop at end of file</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<span style="color: #b1b100;">if</span> <span style="color: #009900;">(</span>c <span style="color: #339933;">==</span> <span style="color: #ff0000;">'<span style="color: #000099; font-weight: bold;">\n</span>'</span><span style="color: #009900;">)</span> <span style="color: #000000; font-weight: bold;">break</span><span style="color: #339933;">;</span>     <span style="color: #666666; font-style: italic;">// stop at end of line</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<span style="color: #b1b100;">if</span> <span style="color: #009900;">(</span>i <span style="color: #339933;">&lt;</span> MAXLINE<span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">			buf<span style="color: #009900;">[</span>i<span style="color: #339933;">++</span><span style="color: #009900;">]</span> <span style="color: #339933;">=</span> c<span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// store in buffer if not full</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">return</span> <span style="color: #009900;">(</span>c <span style="color: #339933;">!=</span> EOF<span style="color: #009900;">)</span><span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// returns false when reach EOF, true otherwise</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li></ol></pre><p>Test results:</p>
+<center>
+<table class="tests">
+<tbody><tr>
+ <th>Input</th>
+ <th>Expected Output</th>
+ <th>Observed Output</th>
+</tr>
+<tr valign="top">
+<td><pre>some text
+some more text
+and even more text
+^D</pre>
+</td>
+<td><pre>some text
+some more text
+and even more text</pre>
+</td>
+<td><pre>some text
+some more text
+and even more text</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>line 1 is very long
+line 2 is shorter
+last line
+^D</pre>
+</td>
+<td><pre>line 1 is very long
+line 2 is shorter
+last line</pre>
+</td>
+<td><pre>line 1 is very long
+line 2 is shorterng
+last line shorterng
+</pre></td>
+</tr>
+<tr valign="top">
+<td><pre>1234567890123456789012345
+^D</pre>
+</td>
+<td><pre>1234567890123456789</pre>
+</td>
+<td><pre>12345678901234567890x$U~</pre>
+</td>
+</tr>
+</tbody></table>
+<small>(This program also crashes on some platforms)</small>
+</center>
+
+ </li>
+
+<br><li>
+<p>Program:</p>
+<pre class="c" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Read numbers from stdin; display them in reverse order of reading</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdio.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">int</span> main<span style="color: #009900;">(</span><span style="color: #993333;">int</span> argc<span style="color: #339933;">,</span> <span style="color: #993333;">char</span> <span style="color: #339933;">*</span>argv<span style="color: #009900;">[</span><span style="color: #009900;">]</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span> i<span style="color: #339933;">,</span> n<span style="color: #339933;">;</span>       <span style="color: #666666; font-style: italic;">// i=index, n=counter</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span> vec<span style="color: #009900;">[</span><span style="color: #0000dd;">1000</span><span style="color: #009900;">]</span><span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// array of integers</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	n <span style="color: #339933;">=</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">while</span> <span style="color: #009900;">(</span><a href="http://www.opengroup.org/onlinepubs/009695399/functions/scanf.html"><span style="color: #000066;">scanf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"%d"</span><span style="color: #339933;">,&amp;</span>vec<span style="color: #009900;">[</span>n<span style="color: #009900;">]</span><span style="color: #009900;">)</span> <span style="color: #339933;">==</span> <span style="color: #0000dd;">1</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		n<span style="color: #339933;">++;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">for</span> <span style="color: #009900;">(</span>i <span style="color: #339933;">=</span> n<span style="color: #339933;">;</span> i <span style="color: #339933;">&gt;</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span> i<span style="color: #339933;">--</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"%d "</span><span style="color: #339933;">,</span>vec<span style="color: #009900;">[</span>i<span style="color: #009900;">]</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">return</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li></ol></pre><p>Test results:</p>
+<center>
+<table class="tests">
+<tbody><tr>
+ <th>Input</th>
+ <th>Expected Output</th>
+ <th>Observed Output</th>
+</tr>
+<tr valign="top">
+<td><pre>1
+^D</pre>
+</td>
+<td><pre>1</pre>
+</td>
+<td><pre>0</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>1 2 3 4 5
+^D</pre>
+</td>
+<td><pre>5 4 3 2 1</pre>
+</td>
+<td><pre>0 5 4 3 2</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>15 99 32 77 64 5 9
+^D</pre>
+</td>
+<td><pre>9 5 64 77 32 99 15</pre>
+</td>
+<td><pre>0 9 5 64 77 32 99</pre>
+</td>
+</tr>
+</tbody></table>
+<small>(This program also crashes on some platforms)</small>
+
+ </center>
+
+<p></p></li><li>
+<p>Program:</p>
+<pre class="c" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Read numbers from stdin; write sorted numbers on stdout</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdio.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdlib.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">int</span> main<span style="color: #009900;">(</span><span style="color: #993333;">int</span> argc<span style="color: #339933;">,</span> <span style="color: #993333;">char</span> <span style="color: #339933;">*</span>argv<span style="color: #009900;">[</span><span style="color: #009900;">]</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span> i<span style="color: #339933;">,</span> n<span style="color: #339933;">;</span>       <span style="color: #666666; font-style: italic;">// i=index, n=counter</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span> vec<span style="color: #009900;">[</span><span style="color: #0000dd;">1000</span><span style="color: #009900;">]</span><span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// array of integers</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span> icompare<span style="color: #009900;">(</span><span style="color: #993333;">const</span> <span style="color: #993333;">void</span> <span style="color: #339933;">*,</span> <span style="color: #993333;">const</span> <span style="color: #993333;">void</span> <span style="color: #339933;">*</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	n <span style="color: #339933;">=</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">while</span> <span style="color: #009900;">(</span><a href="http://www.opengroup.org/onlinepubs/009695399/functions/scanf.html"><span style="color: #000066;">scanf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"%d"</span><span style="color: #339933;">,&amp;</span>vec<span style="color: #009900;">[</span>n<span style="color: #009900;">]</span><span style="color: #009900;">)</span> <span style="color: #339933;">==</span> <span style="color: #0000dd;">1</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		n<span style="color: #339933;">++;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<a href="http://www.opengroup.org/onlinepubs/009695399/functions/qsort.html"><span style="color: #000066;">qsort</span></a><span style="color: #009900;">(</span>vec<span style="color: #339933;">,</span> n<span style="color: #339933;">,</span> <span style="color: #993333;">sizeof</span><span style="color: #009900;">(</span><span style="color: #993333;">int</span><span style="color: #009900;">)</span><span style="color: #339933;">,</span> icompare<span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">for</span> <span style="color: #009900;">(</span>i <span style="color: #339933;">=</span> <span style="color: #0000dd;">0</span><span style="color: #339933;">;</span> i <span style="color: #339933;">&lt;</span> n<span style="color: #339933;">;</span> i<span style="color: #339933;">++</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"%d "</span><span style="color: #339933;">,</span>vec<span style="color: #009900;">[</span>i<span style="color: #009900;">]</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">return</span> EXIT_SUCCESS<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">int</span> icompare<span style="color: #009900;">(</span><span style="color: #993333;">const</span> <span style="color: #993333;">void</span> <span style="color: #339933;">*</span>a<span style="color: #339933;">,</span> <span style="color: #993333;">const</span> <span style="color: #993333;">void</span> <span style="color: #339933;">*</span>b<span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">return</span> <span style="color: #009900;">(</span>a<span style="color: #339933;">-</span>b<span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li></ol></pre><p>Test results:</p>
+<center>
+<table class="tests">
+<tbody><tr>
+ <th>Input</th>
+ <th>Expected Output</th>
+ <th>Observed Output</th>
+</tr>
+<tr valign="top">
+<td><pre>1 2 3
+^D</pre>
+</td>
+<td><pre>1 2 3</pre>
+</td>
+<td><pre>1 2 3</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>5 4 3 2 1
+^D</pre>
+</td>
+<td><pre>1 2 3 4 5</pre>
+</td>
+<td><pre>5 4 3 2 1</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>2 4 1 6 3 8 7 9 5
+^D</pre>
+</td>
+<td><pre>1 2 3 4 5 6 7 8 9</pre>
+</td>
+<td><pre>2 4 1 6 3 8 7 9 5</pre>
+</td>
+</tr>
+</tbody></table>
+</center>
+
+ </li>
+
+<br><li>
+<p>Program:</p>
+<pre class="c" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Read lines of text from stdin; display them in reverse order</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Assumes no more than 1000 lines; lines longer than 100 are truncated</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdlib.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdio.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">int</span> main<span style="color: #009900;">(</span><span style="color: #993333;">int</span> argc<span style="color: #339933;">,</span> <span style="color: #993333;">char</span> <span style="color: #339933;">*</span>argv<span style="color: #009900;">[</span><span style="color: #009900;">]</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span>  n<span style="color: #339933;">=</span><span style="color: #0000dd;">0</span><span style="color: #339933;">;</span>           <span style="color: #666666; font-style: italic;">// counter/index</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">char</span> thisline<span style="color: #009900;">[</span><span style="color: #0000dd;">100</span><span style="color: #009900;">]</span><span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// current line</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">char</span> <span style="color: #339933;">*</span>lines<span style="color: #009900;">[</span><span style="color: #0000dd;">1000</span><span style="color: #009900;">]</span><span style="color: #339933;">;</span>  <span style="color: #666666; font-style: italic;">// array of lines</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #666666; font-style: italic;">// read lines into array of strings</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">while</span> <span style="color: #009900;">(</span><a href="http://www.opengroup.org/onlinepubs/009695399/functions/fgets.html"><span style="color: #000066;">fgets</span></a><span style="color: #009900;">(</span>thisline<span style="color: #339933;">,</span><span style="color: #0000dd;">100</span><span style="color: #339933;">,</span>stdin<span style="color: #009900;">)</span> <span style="color: #339933;">!=</span> NULL<span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		lines<span style="color: #009900;">[</span>n<span style="color: #339933;">++</span><span style="color: #009900;">]</span> <span style="color: #339933;">=</span> thisline<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #666666; font-style: italic;">// print lines in reverse order</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">while</span> <span style="color: #009900;">(</span>n<span style="color: #339933;">--</span> <span style="color: #339933;">&gt;</span> <span style="color: #0000dd;">0</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<a href="http://www.opengroup.org/onlinepubs/009695399/functions/fputs.html"><span style="color: #000066;">fputs</span></a><span style="color: #009900;">(</span>lines<span style="color: #009900;">[</span>n<span style="color: #009900;">]</span><span style="color: #339933;">,</span>stdout<span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">return</span> EXIT_SUCCESS<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li></ol></pre><p>Test results:</p>
+<center>
+<table class="tests">
+<tbody><tr>
+ <th>Input</th>
+ <th>Expected Output</th>
+ <th>Observed Output</th>
+</tr>
+<tr valign="top">
+<td><pre>one line of text
+^D</pre>
+</td>
+<td><pre>one line of text</pre>
+</td>
+<td><pre>one line of text</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>line 1
+line 2
+line 3
+^D</pre>
+</td>
+<td><pre>line 3
+line 2
+line 1</pre>
+</td>
+<td><pre>line 3
+line 3
+line 3</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>a line
+a bigger line
+a really big line
+^D</pre>
+</td>
+<td><pre>a really big line
+a bigger line
+a line</pre>
+</td><td><pre>a really big line
+a really big line
+a really big line</pre>
+</td>
+
+</tr>
+</tbody></table>
+</center>
+
+ </li>
+
+<br><li>
+<p>Program:</p>
+<pre class="c" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #666666; font-style: italic;">// Read numbers from stdin and build a linked list of these numbers. </span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdio.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #339933;">#include &lt;stdlib.h&gt;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">typedef</span> <span style="color: #993333;">struct</span> n <span style="color: #009900;">{</span> <span style="color: #993333;">int</span> data<span style="color: #339933;">;</span> <span style="color: #993333;">struct</span> n <span style="color: #339933;">*</span> next<span style="color: #339933;">;</span> <span style="color: #009900;">}</span> Node<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">typedef</span> Node <span style="color: #339933;">*</span>List<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #993333;">int</span> main<span style="color: #009900;">(</span><span style="color: #993333;">int</span> argc<span style="color: #339933;">,</span> <span style="color: #993333;">char</span> <span style="color: #339933;">*</span>argv<span style="color: #009900;">[</span><span style="color: #009900;">]</span><span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #993333;">int</span>  n<span style="color: #339933;">;</span>           <span style="color: #666666; font-style: italic;">// current input number</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	Node <span style="color: #339933;">*</span>new<span style="color: #339933;">,</span> <span style="color: #339933;">*</span>p<span style="color: #339933;">;</span>    <span style="color: #666666; font-style: italic;">// new=new Node, p=cursor</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	List nums <span style="color: #339933;">=</span> NULL<span style="color: #339933;">;</span> <span style="color: #666666; font-style: italic;">// linked list</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #666666; font-style: italic;">// for each number</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">while</span> <span style="color: #009900;">(</span><a href="http://www.opengroup.org/onlinepubs/009695399/functions/scanf.html"><span style="color: #000066;">scanf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"%d"</span><span style="color: #339933;">,&amp;</span>n<span style="color: #009900;">)</span> <span style="color: #339933;">==</span> <span style="color: #0000dd;">1</span><span style="color: #009900;">)</span> <span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<span style="color: #666666; font-style: italic;">// build node for number</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<span style="color: #b1b100;">if</span> <span style="color: #009900;">(</span><span style="color: #009900;">(</span>new <span style="color: #339933;">=</span> <a href="http://www.opengroup.org/onlinepubs/009695399/functions/malloc.html"><span style="color: #000066;">malloc</span></a><span style="color: #009900;">(</span><span style="color: #993333;">sizeof</span><span style="color: #009900;">(</span>Node<span style="color: #009900;">)</span><span style="color: #009900;">)</span><span style="color: #009900;">)</span> <span style="color: #339933;">==</span> NULL<span style="color: #009900;">)</span> <span style="color: #009900;">{</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">			<a href="http://www.opengroup.org/onlinepubs/009695399/functions/fprintf.html"><span style="color: #000066;">fprintf</span></a><span style="color: #009900;">(</span>stderr<span style="color: #339933;">,</span> <span style="color: #ff0000;">"Out of memory<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span> <a href="http://www.opengroup.org/onlinepubs/009695399/functions/exit.html"><span style="color: #000066;">exit</span></a><span style="color: #009900;">(</span><span style="color: #0000dd;">1</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		new<span style="color: #339933;">-&gt;</span>data <span style="color: #339933;">=</span> n<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		new<span style="color: #339933;">-&gt;</span>next <span style="color: #339933;">=</span> NULL<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<span style="color: #666666; font-style: italic;">// find last node and append new node onto list</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<span style="color: #b1b100;">for</span> <span style="color: #009900;">(</span>p <span style="color: #339933;">=</span> nums<span style="color: #339933;">;</span> p<span style="color: #339933;">-&gt;</span>next <span style="color: #339933;">!=</span> NULL<span style="color: #339933;">;</span> p <span style="color: #339933;">=</span> p<span style="color: #339933;">-&gt;</span>next<span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">			<span style="color: #808080; font-style: italic;">/* scan */</span> <span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		p<span style="color: #339933;">-&gt;</span>next <span style="color: #339933;">=</span> new<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #666666; font-style: italic;">// display contents of list</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"nums"</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">for</span> <span style="color: #009900;">(</span>p <span style="color: #339933;">=</span> nums<span style="color: #339933;">;</span> p <span style="color: #339933;">!=</span> NULL<span style="color: #339933;">;</span> p <span style="color: #339933;">=</span> p<span style="color: #339933;">-&gt;</span>next<span style="color: #009900;">)</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">		<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"-&gt;%d"</span><span style="color: #339933;">,</span>p<span style="color: #339933;">-&gt;</span>data<span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span style="color: #000066;">printf</span></a><span style="color: #009900;">(</span><span style="color: #ff0000;">"<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #009900;">)</span><span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">	<span style="color: #b1b100;">return</span> EXIT_SUCCESS<span style="color: #339933;">;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;">}</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li></ol></pre><p>Test results:</p>
+<center>
+<table class="tests">
+<tbody><tr>
+ <th>Input</th>
+ <th>Expected Output</th>
+ <th>Observed Output</th>
+</tr>
+<tr valign="top">
+<td><pre>^D</pre>
+</td>
+<td><pre>nums</pre>
+</td>
+<td><pre>nums</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>1 2 3 4 5
+^D</pre>
+</td>
+<td><pre>nums-&gt;1-&gt;2-&gt;3-&gt;4-&gt;5</pre>
+</td>
+<td><pre>Segmentation fault (core dumped)</pre>
+</td>
+</tr>
+<tr valign="top">
+<td><pre>3 2 4 1 6 5
+^D</pre>
+</td>
+<td><pre>nums-&gt;3-&gt;2-&gt;4-&gt;1-&gt;6-&gt;5</pre>
+</td>
+<td><pre>Segmentation fault (core dumped)</pre>
+</td>
+</tr>
+</tbody></table>
+</center>
+
+ </li>
+
+</ol>
+
+
+
+
+<iframe frameborder="0" scrolling="no" style="border: 0px; display: none; background-color: transparent;"></iframe><div id="GOOGLE_INPUT_CHEXT_FLAG" input="" input_stat="{&quot;tlang&quot;:true,&quot;tsbc&quot;:true,&quot;pun&quot;:true,&quot;mk&quot;:true,&quot;ss&quot;:true}" style="display: none;"></div></body></html>

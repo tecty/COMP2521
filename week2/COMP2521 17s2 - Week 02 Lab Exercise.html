@@ -1,0 +1,629 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0062)https://cgi.cse.unsw.edu.au/~cs2521/17s2/labs/week02/index.php -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>COMP2521 17s2 - Week 02 Lab Exercise</title>
+<link rel="stylesheet" type="text/css" href="./COMP2521 17s2 - Week 02 Lab Exercise_files/course.css"></head>
+<body>
+<div align="center">
+<table width="100%" border="0">
+<tbody><tr valign="top">
+<td align="left" width="25%">
+  <span class="tiny"><a href="http://www.cse.unsw.edu.au/~cs2521/17s2/index.php">COMP2521 17s2</a></span>
+</td>
+<td align="center" width="50%">
+  <span class="heading">Week 02 Lab Exercise</span><br>
+  <span class="subheading">Linked Lists, Performance</span>
+</td>
+<td align="right" width="25%">
+  <span class="tiny"><a href="http://www.cse.unsw.edu.au/~cs2521/17s2/index.php">Data Structures and Algorithms</a></span>
+</td>
+</tr></tbody></table>
+</div>
+<h2>Objectives</h2>
+<ul>
+<li> to re-acquaint you with C progamming and ADTs
+</li><li> to manipulate a linked-list data structure
+</li><li> to learn about the COMP2521 programming style
+</li><li> to learn (or remind yourself) about Makefiles
+</li><li> to learn about shell scripts to automate repetitive tasks
+</li><li> to do some simple performance analysis
+</li></ul>
+
+<h2>Admin</h2>
+<table border="0" cellpadding="4">
+<tbody><tr><td><b>Marks</b></td><td>5=outstanding, 4=very good, 3=adequate, 2=sub-standard, 1=hopeless</td></tr>
+<tr><td><b>Demo</b></td><td>in the Week02 Lab or in the Week03 Lab</td></tr>
+<tr><td><b>Submit</b></td><td><tt>give cs2521 lab02 IntList.c timing.txt</tt> &nbsp; or via WebCMS</td></tr>
+<tr><td><b>Deadline</b></td><td>must be submitted by 11:59pm Sunday 06 August</td></tr>
+</tbody></table>
+<p><small>
+Note: you need to do something <i>truly</i> outstanding, above and beyond
+the "call of duty" to get 5 marks.
+Doing the exercise just as specified will generally get you 4-4.5 marks.
+</small></p>
+
+<h2>Background</h2>
+<p>
+At the end of COMP1511, you dealt with linked lists.  Over the break,
+you haven't forgotten linked lists (have you?), but a bit of revision never hurts,
+especially when many of the data structures we'll deal with later are
+based on linked lists. So ... on with this simple linked list exercise ...
+</p>
+
+<h2>Setting Up</h2>
+<p>
+To keep your files manageable, it's worth doing each lab exercise in a separate directory
+(folder).
+I'd suggest creating a subdirectory in your home directory called "cs2521", and then creating a
+subdirectory under that called "labs", and then subdirectories "week02", "week03", etc. Let's
+assume that the directory you finally set up for this lab is <i>Week02LabDir</i>.
+</p>
+<p>
+Change into your <i>Week02LabDir</i> directory and run the following command:
+</p>
+<pre>$ <b>unzip <a href="http://www.cse.unsw.edu.au/~cs2521/17s2/labs/week02/lab.zip">/home/cs2521/web/17s2/labs/week02/lab.zip</a></b>
+</pre>
+<p>
+If you're working at home, download <tt>lab.zip</tt> by right-clicking on the above link
+and then run the above command on your local machine.
+</p>
+<div class="note">
+In the example interactions, we assume that you are in a Linux shell window,
+and the shell is giving you a <tt>$</tt> prompt.
+All the text that you type is in <tt><b>bold</b></tt> font and all the text that
+the shell types at you is in <tt>normal</tt> font.
+</div>
+<p>
+If you've done the above correctly, you should now find the following files in the directory:
+</p>
+<table border="0" cellpadding="4">
+<tbody><tr><td><tt>Makefile</tt></td><td>a set of dependencies used to control compilation</td></tr>
+<tr><td><tt>IntList.h</tt></td><td>interface definition for the IntList ADT</td></tr>
+<tr><td><tt>IntList.c</tt></td><td>implementation for the IntList ADT</td></tr>
+<tr><td><tt>useIntList.c</tt></td><td>main program for testing the IntList ADT</td></tr>
+<tr><td><tt>randList.c</tt></td><td>main program for generating random sequences of numbers</td></tr>
+<tr><td><tt>timing.txt</tt></td><td>template for your results file; you need to add more rows</td></tr>
+</tbody></table>
+<p>
+Before you start using these programs, it's worth looking at the code.
+Are there any constructs that you don't understand? Try to work them out
+with your lab partner, or ask your tutor.
+</p>
+<p>
+Once you've understood the programs, the next thing to do is to run the command:
+</p>
+<pre>$ <b>make</b>
+</pre>
+<p>
+It's worth taking a look at the <tt>Makefile</tt> to see if you can work out
+what it's doing. Don't worry if you don't understand it all; we'll be taking
+a longer look at <tt>make</tt> in later labs.
+Note: you will need to run <tt>make</tt> to recompile the system each time
+you make changes to the source code file and are ready to test the program again.
+</p>
+<p>
+The <tt>make</tt> command will produce messages about compiling with
+<tt>gcc</tt> and will eventually leave two
+executable files in your directory (along with some <tt>.o</tt> files).
+</p>
+<dl>
+<dt><tt>usel</tt></dt>
+<dd>
+This is the executable for the <tt>useIntList.c</tt> program.
+It reads a list of integers from standard input, then attempts to
+make a sorted (ascending order) copy of the list, and then prints
+both the original and the sorted lists.
+It doesn't work at the moment because the function to produce the
+sorted list is incomplete.
+</dd>
+<dt><tt>randl</tt>
+</dt><dd>
+This is the executable for the <tt>randList.c</tt> program.
+It writes, on its standard output, a list of random numbers
+in the range 1..999999.
+It takes one command-line argument to indicate how many
+numbers it should write, and another optional argument to
+give a seed for the random number generator.
+Note that it does not attempt to eliminate any duplicate
+values produced; if you generate a large enough number of
+values, duplicates are inevitable.
+</dd>
+</dl>
+<p>
+You can run the <tt>usel</tt> command by typing the command name, followed by return.
+It will then patiently wait for you to type some numbers, and will store them in a
+list, display the list, then call the function that is supposed to sort the list,
+and then display the "sorted" list.
+Of course, this doesn't currently work, because the list sorting function is incomplete.
+You can, however, fake it by typing the numbers in in order, e.g.
+</p>
+<pre>$ <b>./usel -v</b>
+<b>1 2 3 4</b>
+<span class="comment">Here you type control-D to finish your input</span>
+Original:
+1
+2
+3
+4
+Sorted:
+1
+2
+3
+4
+</pre>
+<p>
+When <tt>usel</tt> eventually works properly, this is the kind of output you'll
+expect to see ... except that you won't be giving it sorted lists as input.
+To see the existing behaviour on an unsorted list, type a few numbers not sorted
+in ascending order, e.g.
+</p>
+<pre>$ <b>./usel -v</b>
+<b>1 3 2</b>
+<span class="comment">Once again, you type control-D to finish your input</span>
+Original:
+1
+3
+2
+Sorted
+1
+3
+2
+usel: useIntList.c:20: main: Assertion `IntListIsSorted(myOtherList)' failed.
+Aborted
+</pre>
+<p>
+If you omit the <tt>-v</tt> command-line parameter, the the <tt>usel</tt>
+program only displays the final sorted list (which is not yet sorted, of course).
+</p>
+<pre>$ <b>./usel</b>
+<b>1 3 2</b>
+<span class="comment">Once again, you type control-D to finish your input</span>
+1
+3
+2
+usel: useIntList.c:20: main: Assertion `IntListIsSorted(myOtherList)' failed.
+Aborted
+</pre>
+<p>
+Now it's time to play with the list generator.
+If you execute the command:
+</p>
+<pre>$ <b>/.randl 10</b>
+</pre>
+<p>
+it should display a list of 10 random numbers.
+If you run it again, you'll get a different list of random numbers.
+Enjoy generating small lists of random numbers until you are bored.
+</p>
+<p>
+If you then execute the command:
+</p>
+<pre>$ <b>./randl 10 | ./usel</b>
+</pre>
+<p>
+the <tt>randl</tt> command will generate 10 random numbers and give them
+to the <tt>usel</tt> command which will print the list of numbers twice
+(separated by the word <tt>Sorted</tt>) and then fail the assertion as
+above.
+</p>
+<div class="note">
+If you're not familiar with Unix/Linux conventions, the <tt>|</tt> is a "pipe" that
+connects two commands, e.g. <tt><i>C<sub>1</sub></i>|<i>C<sub>2</sub></i></tt>.
+The standard output (<tt>stdout</tt>) of the command <tt><i>C<sub>1</sub></i></tt>
+will be directly connected to the standard input (<tt>stdin</tt>) of the command
+<tt><i>C<sub>2</sub></i></tt>, so that whatever <tt><i>C<sub>1</sub></i></tt> writes,
+<tt><i>C<sub>2</sub></i></tt> reads.
+</div>
+<p>
+You can adjust the number of numbers that <tt>randl</tt> generates via the command-line argument, e.g.
+</p>
+<pre>$ <b>./randl 100 | less</b>
+</pre>
+<p>
+will produce 100 random numbers. If you want to change the range of numbers produced
+(e.g. to only make numbers in the range 1..10) edit the <tt>randList.c</tt> code
+and add extra command-line arguments to set the range.
+</p>
+<p>
+If you supply only one command-line argument, <tt>randl</tt> will generate a completely
+random (well, pseudo-random) sequence each time you run it. If you want to generate a
+large sequence of pseudo-random numbers, and be able to generate the same sequence
+consistently, you can use the second command-line argument to specify a seed for the
+random number generator. If you give the same seed each time you run <tt>randl</tt>,
+you'll get the same sequence each time. To see the difference between using and not
+using the second command-line argument, try the following commands:
+</p>
+<pre>$ <b>./randl 10</b>
+$ <b>./randl 10</b>
+$ <b>./randl 10</b>
+$ <b>./randl 10 13</b>
+$ <b>./randl 10 13</b>
+$ <b>./randl 10 13</b>
+</pre>
+<p>
+The first three commands will generate different sequences.
+The second three commands all generate the same sequence.
+</p>
+<p>
+While <tt>./randl</tt> is useful for producing large amounts of data,
+you don't need to use <tt>./randl</tt> to produce input to <tt>./usel</tt>.
+An alternative is to use the <tt>echo</tt> command and enter the numbers
+yourself, e.g.
+</p>
+<pre>$ <b>echo 5 4 3 2 1 | ./usel</b>
+</pre>
+<p>
+Another alternative, which will be more useful for testing, is to use the
+<tt>seq</tt> command, in combination with the <tt>sort</tt> command, e.g.
+</p>
+<pre>$ <b>seq 10</b>
+<span class="comment"># gives 1 2 3 4 5 6 7 8 9 10</span>
+$ <b>seq 10 | sort -n</b>
+<span class="comment"># gives 1 2 3 4 5 6 7 8 9 10</span>
+$ <b>seq 10 | sort -nr</b>
+<span class="comment"># gives 10 9 8 7 6 5 4 3 2 1</span>
+$ <b>seq 10 | sort -R</b>
+<span class="comment"># gives 1..10 in a random order</span>
+</pre>
+<p>
+The <tt>-nr</tt> argument to the <tt>sort</tt> command tells it to
+treat the input as numbers and sort them in reverse order.
+The <tt>-R</tt> argument to the <tt>sort</tt> command tells it to
+put the input in random order.
+You can find more details about <tt>sort</tt> via the command
+<tt>man&nbsp;sort</tt>.
+</p>
+<p>
+One thing to remember is that <tt>sort</tt> orders items lexically,
+not numerically, by default. The following pipeline may not produce
+what you expect. Try it.
+</p>
+<pre>$ <b>seq 10 | sort</b>
+</pre>
+
+<h2>Task 1</h2>
+<p>
+The <tt>IntListInsertInorder()</tt> function is incomplete. In fact,
+it's just a <i>stub</i> function that invokes the <tt>IntListInsert()</tt>
+function, which inserts the number, but not in order. You should re-write
+the <tt>IntListInsertInorder()</tt> function
+so that it takes an <tt>IntList</tt> and an integer and inserts the value
+into the appropriate place in the list, so that the list always remains
+sorted (in ascending order). The function should fail if the original list
+(before insertion)
+is not sorted. Don't forget to handle the cases of (a) empty list,
+(b) smallest value, (c) largest value, (d) second-smallest value,
+(e) second-largest value, (f) value somewhere in the middle.
+Why were these kinds of values chosen? Discuss with your partner
+and propose test cases that test these and any other cases that you
+can think of.
+</p>
+<p>
+Make a directory called <tt>tests</tt>,
+and place files containing your test cases in that directory
+with one test case in each file.
+A useful name strategy is to call the test files 
+<tt>01</tt>, <tt>02</tt>, etc.
+You could create test files in various ways, e.g.
+</p>
+<pre>$ <b>mkdir tests</b>
+$ <b>seq 10 | sort -R &gt; tests/01</b>
+$ <b>seq 10 | sort -nr &gt; tests/02</b>
+$ <b>randl 10 11 &gt; tests/03</b>
+<span class="comment">etc. etc. etc.</span>
+</pre>
+<p>
+In order to check that your program is producing the correct results,
+you could compare it to the output of a known correct sorting program.
+The <tt>diff</tt> command can help here (see <tt>man diff</tt> for details).
+For example, you could put each test case in a file, then run both
+your <tt>usel</tt> program and the built-in <tt>sort</tt> command,
+save the results of each output in a file, and then compare the files
+using <tt>diff</tt>. If your program is correct, there should be no
+difference. The following shows an example of how to do this:
+</p>
+<pre>$ <b>sort -n &lt; tests/01 &gt; tests/01.expected</b>    <span class="comment"># generate correct result</span>
+$ <b>./usel &lt; tests/01 &gt; tests/01.observed</b>     <span class="comment"># generate *your* result</span>
+$ <b>diff tests/01.expected tests/01.observed</b>  <span class="comment"># if correct, no output</span>
+</pre>
+<p>
+If you produce a decent number of tests (10-20), as you should, then
+testing them one by one using the above is a bit tedious.
+You could simplify carrying out the testing by writing a small
+shell script like:
+</p>
+<pre>#!/bin/sh
+
+for t in 01 02 03 04 05 <span class="comment">... and the rest of your test files</span>
+do
+	echo === Test $t ===
+	sort -n &lt; tests/$t &gt; tests/$t.expected
+	./usel &lt; tests/$t &gt; tests/$t.observed
+	diff tests/$t.expected tests/$t.observed
+done
+rm tests/*.expected tests/*.observed
+</pre>
+<p>
+If you put the above in a file called e.g. <tt>run_tests</tt>, and then
+run the command:
+</p>
+
+$ <b>sh run_tests</b>
+
+<p>
+the script will run all your test cases and any that fail will either
+produce an assertion message or show you the difference between your
+output and the expected output.
+</p>
+<p>
+You will have some confidence that your <tt>IntListInsertInorder()</tt> function
+is working properly when, for all test cases, the assertions in <tt>useIntList.c</tt>
+no longer fail.
+</p>
+
+<h2>Task 2</h2>
+<p>
+Once <tt>IntListInsertInorder()</tt> is working correctly, modify
+<tt>useIntList.c</tt> so that it behaves as a sorting program: it reads
+a list of numbers from its standard input, and writes a sorted version
+of the numbers to its standard output. This is a simple change to the
+existing program, and can be accomplished by commenting a couple of lines.
+</p>
+<p>
+Recompile and check that the new version of <tt>usel</tt> behaves correctly.
+Once you're satisfied, run some tests to compare the time taken by <tt>usel</tt>
+with the time taken by the Unix <tt>sort</tt> command for the same task.
+</p>
+<p>
+The first thing to do is to check that both commands are producing the same result
+(otherwise, it's not useful to compare them). Try the following commands:
+</p>
+<pre>$ <b>./randl 1000 &gt; nums</b>
+$ <b>./usel &lt; nums &gt; out1</b>
+$ <b>sort -n &lt; nums &gt; out2</b>
+$ <b>diff out1 out2</b>
+</pre>
+<p>
+If the <tt>diff</tt> command gives <em>no</em> output, then the files
+have no difference (i.e. the observed output is he same as the expected
+output).  If you try the above a number of times with different sets of
+numbers each time and get the same result, then you can be more confident
+that both commands are producing the same result.
+(However, you cannot be absolutely certain that they will always produce
+the same result for any input. Why not?)
+</p>
+<p>
+Note that you need to use the <tt>-n</tt> option to <tt>sort</tt> because the
+default sorting order is lexcial, not numeric. If you don't use <tt>-n</tt>,
+then e.g. 111 is treated as being less than 12.
+(See <tt>man sort</tt> for details.)
+</p>
+<p>
+The next thing to do is to devise a set of test cases and collect some timing data.
+There is a command called <tt>time</tt> that will produce the timing data for you.
+Use it as follows:
+</p>
+<pre>$ <b>./randl 100000 &gt; nums</b>
+$ <b>time ./usel &lt; nums &gt; out1</b>
+$ <b>time sort -n &lt; nums &gt; out2</b>
+</pre>
+<p>
+As before, check that both commands are producing the same result.
+This time, however, you will also see output that contains some
+timing information (note that the output format may vary depending
+on which shell you're using):
+</p>
+<table border="0" cellpadding="4">
+<tbody><tr><td>user time</td><td>time spent executing the code of the command</td></tr>
+<tr><td>system time</td><td>time spent executing system operations, such as input/output</td></tr>
+<tr><td>elapsed/real time</td><td>wall-clock time between when the command starts and finishes</td></tr>
+</tbody></table>
+<p>
+The elapsed/real time is affected by the load on the machine, and so
+is not reliable. The system time should be similar for both commands
+(same amount of input/output). The value that's most useful is the
+<tt>user time</tt>, which represents the time that the program spent
+doing computation. Note that the time will vary if you run the same
+command multiple times.  This is because the timing uses sampling
+and may sample the program at different points during the different
+executions. Collect results from a number of executions on the same
+output and take an average.
+</p>
+<p>
+You will need to use large numbers of values (large argument to
+<tt>randl</tt>) to observe any appreciable difference. Of course, if you use
+very large numbers of values, the <tt>nums</tt> file may become too large
+to store in your directory.  In this case, you could store <tt>nums</tt>
+under the <tt>/tmp</tt> directory:
+</p>
+<pre>$ <b>./randl 10000 &gt; /tmp/nums</b>
+$ <b>time ./usel &lt; /tmp/nums &gt; /tmp/out1</b>
+$ <b>time sort -n &lt; /tmp/nums &gt; /tmp/out2</b>
+$ <b>diff /tmp/out1 /tmp/out2</b>
+</pre>
+<p>
+It would also be worth taking your <tt>/tmp/nums</tt> file and
+modifying it to check the timings for sorted and reverse sorted
+inputs:
+</p>
+<pre>$ <b>sort -n /tmp/nums &gt; alreadySortedWithDuplicates</b>
+$ <b>sort -nr /tmp/nums &gt; reverseSortedWithDuplicates</b>
+</pre>
+<p>
+As well as lists produced by <tt>randl</tt>, it would be worth trying
+lists produced using the <tt>seq</tt>/<tt>sort</tt> combinations
+mentioned above.
+These will be different to the lists produced by <tt>randl</tt> in
+that they won't have any duplicate values.
+For example, you could generate data files like:
+</p>
+<pre>$ <b>seq 10000 &gt; alreadySortedNoDuplicates</b>
+$ <b>seq 10000 | sort -nr &gt; reverseSortedNoDuplicates</b>
+$ <b>seq 10000 | sort -R &gt; randomOrderNoDuplicates</b>
+</pre>
+<p>
+and use these in place of <tt>/tmp/nums</tt> to generate more timing
+data.
+</p>
+<p>
+Once the data files get big enough, and once you've checked that both
+programs are producing the same output for a wide selection of cases,
+you can avoid generating and comparing large output files by running
+the timing commands as follows:
+</p>
+<pre>$ <b>time ./usel &lt; /tmp/nums &gt; /dev/null</b>
+$ <b>time sort -n &lt; /tmp/nums &gt; /dev/null</b>
+</pre>
+<p>
+The above commands do all of the computation that we want to measure,
+but send their very large output to the Unix/Linux "data sink"
+(<tt>/dev/null</tt>), so it never takes up space on the file system.
+</p>
+<p>
+If you do write results to files, don't forget to remove them after
+you've finished the lab.
+</p>
+<p>
+You should take note of the timing output and build a collection of test
+results for different sizes/types of input and determine roughly the point at
+which it becomes impractical to use <tt>usel</tt> as a sort program
+(rather than using the Unix <tt>sort</tt> command).
+</p>
+<p>
+You'll find
+that the timing data for relatively small lists (e.g. up to 10000)
+doesn't show much difference between <tt>usel</tt> and <tt>sort</tt>,
+and shows time pretty close to zero.  Try using list sizes such as 5000,
+10000, 20000, 50000, 100000, and as high as you dare to go after that.
+Also, try varying the kinds of input that you supply. Consider the cases
+for the order of the input: random, already sorted, reverse sorted.
+Also, consider the proportion of duplicate values in the input, e.g.
+all distinct values, some duplicates.
+ Note that <tt>./randl</tt> will
+most likely include duplicates as soon as you specify a relatively
+large list size.
+
+</p>
+<p>
+Put your results and some brief comments <span class="red">explaining</span>
+the results, in a file called <tt>timing.txt</tt>.
+The file should contain a table of results, with major rows dealing
+with a particular size of data, and sub-rows dealing with the order
+of the input.
+You should have three columns: one to indicate how many runs of each
+program were used to compute the average time-cost, one to give the
+average time-cost for <tt>usel</tt> and the other to give the average
+time-cost for <tt>sort</tt>.
+The table should look something like the following:
+</p>
+<table cellpadding="6px">
+<tbody><tr>
+ <td><b>Input<br>Size</b></td>
+ <td><b>Initial<br>Order</b></td>
+ <td><b>Has<br>Duplicates</b></td>
+ <td><b>Number<br>of runs</b></td>
+ <td><b>Avg Time<br>for usel</b></td>
+ <td><b>Avg Time<br>for sort</b></td>
+</tr>
+<tr>
+ <td>5000</td><td>random</td><td>no</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>5000</td><td>sorted</td><td>no</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>5000</td><td>reverse</td><td>no</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>5000</td><td>random</td><td>yes</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>5000</td><td>sorted</td><td>yes</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>5000</td><td>reverse</td><td>yes</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>10000</td><td>random</td><td>no</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>10000</td><td>sorted</td><td>no</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>10000</td><td>reverse</td><td>no</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+</tr><tr>
+ <td>10000</td><td>random</td><td>yes</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>10000</td><td>sorted</td><td>yes</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td>10000</td><td>reverse</td><td>yes</td>
+ <td><i>N</i></td><td><i>T<sub>1</sub></i>sec</td><td><i>T<sub>2</sub></i>sec</td>
+</tr>
+<tr>
+ <td><i>etc. etc.</i></td>
+</tr>
+</tbody></table>
+Note that, given the variation in timing output, it's not worth
+considering more than two significant figures in your averages.
+<p></p>
+<p>
+You should also write a short paragraph to <i>explain</i> any
+patterns that you notice in the timing results. Don't just re-state
+the timing result in words; try to explain <i>why</i> they happened.
+</p>
+<p>
+If you're looking for a challenge, and know how to write scripts,
+write e.g. a Linux shell script to automate the testing for you,
+and maybe even produce the timing file for you.
+</p>
+<p>
+Another interesting challenge would be to plot graphs using the R
+system, available as the Linux command <tt>R</tt> (a single upper-case
+letter). I'd suggest plotting a separate graph for each type (random,
+ascedning, descending) for a range of values (e.g. 5000, 10000, 20000,
+50000, ... as far as you can be bothered, given how long larger data
+files take to sort).
+Alternatively, produce your <tt>timing.txt</tt> as a tab-separated
+file and load it into a spreadsheet, from where you could also
+produce graphs.
+</p>
+<p>
+If you're feeling brave, try to find out how large input <tt>sort</tt>
+can deal with.  However, you should try such testing on a machine where
+you are the sole user. Also, you shouldn't try to store the data files;
+use commands like:
+</p>
+<pre>$ <b>seq <i>SomeVeryLargeNumber</i> | time sort -n &gt; /dev/null</b>
+$ <b>seq <i>SomeVeryLargeNumber</i> | sort -nr  | time sort -n &gt; /dev/null</b>
+$ <b>seq <i>SomeVeryLargeNumber</i> | sort -R | time sort -n &gt; /dev/null</b>
+</pre>
+
+<h2>Submission</h2>
+<p>
+You need to submit two files: <tt>IntList.c</tt> and <tt>timing.txt</tt>.
+You can submit these via the command line using <tt>give</tt> or you can
+submit them from within WebCMS. After submitting them (either in this lab
+class or the next) show your tutor, who'll give you feedback on your
+coding style, your timing results, and award a mark.
+</p>
+<p>
+Have fun, <i>jas</i>
+</p>
+
+
+<iframe frameborder="0" scrolling="no" style="border: 0px; display: none; background-color: transparent;"></iframe><div id="GOOGLE_INPUT_CHEXT_FLAG" input="" input_stat="{&quot;tlang&quot;:true,&quot;tsbc&quot;:true,&quot;pun&quot;:true,&quot;mk&quot;:true,&quot;ss&quot;:true}" style="display: none;"></div><div id="gtx-trans" style="position: absolute; left: 115px; top: 680.594px;"><div class="gtx-trans-icon"></div></div></body></html>
