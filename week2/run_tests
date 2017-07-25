@@ -1,0 +1,12 @@
+#!/bin/sh
+
+for t in 01 02 03 04 05 
+# rest of your test files
+do
+	echo === Test $t ===
+	sort -n < tests/$t > tests/$t.expected
+	./usel < tests/$t > tests/$t.observed
+	diff tests/$t.expected tests/$t.observed
+done
+rm tests/*.expected tests/*.observed
+echo == Test End ==
