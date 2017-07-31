@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for t in 01 02 03 04 05 
+for t in 01 02 03 04 05
 # rest of your test files
 do
 	echo === Test $t ===
@@ -9,4 +9,3 @@ do
 	diff tests/$t.expected tests/$t.observed
 done
 rm tests/*.expected tests/*.observed
-echo == Test End ==
