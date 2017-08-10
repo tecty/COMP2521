@@ -97,7 +97,7 @@ DLList getDLList(FILE *in)
 			L->last = new;
 		}
 		L->nitems++;
-	}	
+	}
 	L->curr = L->first;
 	return L;
 }
@@ -210,16 +210,47 @@ int DLListMoveTo(DLList L, int i)
 // new item becomes current item
 void DLListBefore(DLList L, char *it)
 {
-	assert(L != NULL); 
-	// COMPLETE THIS FUNCTION
+	assert(L != NULL);
+
+    // initial the node should insert
+    struct DLListNode *this = newDLListNode(it);
+
+    /* insert this node */
+    if (L->curr == L->first) {
+        /* the current node is the first node */
+        L->first = new;
+    }
+    // set the link
+    L->curr->prev = new;
+    new->next= L->curr;
+    // set the curr to the added item
+    L->curr = new;
+    // increament the counter
+    L->nitems ++;
+
 }
 
 // insert an item after current item
 // new item becomes current item
 void DLListAfter(DLList L, char *it)
 {
-	assert(L != NULL); 
-	// COMPLETE THIS FUNCTION
+	assert(L != NULL);
+    // initial the node should insert
+    struct DLListNode *this = newDLListNode(it);
+
+    /* insert this node */
+    if (L->curr == L->last) {
+        /* the current node is the first node */
+        L->last = new;
+    }
+    // set the link
+    L->curr->next = new;
+    new->prev= L->curr;
+    // set the curr to the added item
+    L->curr = new;
+    // increament the counter
+    L->nitems ++;
+
 }
 
 // delete current item
@@ -229,7 +260,34 @@ void DLListAfter(DLList L, char *it)
 void DLListDelete(DLList L)
 {
 	assert (L != NULL);
-	// COMPLETE THIS FUNCTION
+    struct DLListNode *delete_node = L->curr;
+
+    assert(L->curr!= NULL);
+    if (L->first == L->last) {
+        /* the list only have one node */
+        L->curr=L->last=L->first=NULL;
+    }
+    else if (L->curr ==L->last) {
+        /* current node is the last */
+        L->curr = L->last = L->last->prev;
+        L->last->next =NULL;
+    }
+    else if (L->curr ==L->first) {
+        /* current node is the first */
+        L->curr = L->first = L->first->next;
+        L->first->prev =NULL;
+    }
+    else {
+        /* normal situation */
+        L->curr = L->curr->prev;
+        L->curr->next = L->curr->next->next;
+        L->curr->next->prev = L->curr;
+    }
+    // delete the node should be delete
+    free(delete_node);
+    // set the counter
+    L->nitems--;
+
 }
 
 // return number of elements in a list
@@ -243,4 +301,3 @@ int DLListIsEmpty(DLList L)
 {
 	return (L->nitems == 0);
 }
-
