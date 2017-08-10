@@ -213,7 +213,7 @@ void DLListBefore(DLList L, char *it)
 	assert(L != NULL);
 
     // initial the node should insert
-    struct DLListNode *this = newDLListNode(it);
+    struct DLListNode *new = newDLListNode(it);
 
     /* insert this node */
     if (L->curr == L->first) {
@@ -236,7 +236,7 @@ void DLListAfter(DLList L, char *it)
 {
 	assert(L != NULL);
     // initial the node should insert
-    struct DLListNode *this = newDLListNode(it);
+    struct DLListNode *new = newDLListNode(it);
 
     /* insert this node */
     if (L->curr == L->last) {
