@@ -8,22 +8,7 @@
 #include <assert.h>
 #include "DLList.h"
 
-// data structures representing DLList
 
-typedef struct DLListNode {
-	char   *value;  // value of this list item (string)
-	struct DLListNode *prev;
-	               // pointer previous node in list
-	struct DLListNode *next;
-	               // pointer to next node in list
-} DLListNode;
-
-typedef struct DLListRep {
-	int  nitems;      // count of items in list
-	DLListNode *first; // first node in list
-	DLListNode *curr;  // current node in list
-	DLListNode *last;  // last node in list
-} DLListRep;
 
 // create a new DLListNode (private function)
 static DLListNode *newDLListNode(char *it)
@@ -216,17 +201,29 @@ void DLListBefore(DLList L, char *it)
     struct DLListNode *new = newDLListNode(it);
 
     /* insert this node */
-    if (L->curr == L->first) {
-        /* the current node is the first node */
-        L->first = new;
+    if (L->nitems == 0) {
+        /* the list is empty */
+        L->curr = L->last = L->first = new;
     }
-    // set the link
-    L->curr->prev = new;
-    new->next= L->curr;
-    // set the curr to the added item
-    L->curr = new;
-    // increament the counter
-    L->nitems ++;
+    else{
+        if (L->curr == L->first) {
+            /* the current node is the first node */
+            L->first = new;
+        }
+        else{
+            printf("imhere\n" );
+            // set up the link before the curr
+            L->curr->prev->next = new;
+            new ->prev = L->curr->prev;
+        }
+        // set the link
+        L->curr->prev = new;
+        new->next= L->curr;
+        // set the curr to the added item
+        L->curr = new;
+        // increament the counter
+        L->nitems ++;
+    }
 
 }
 
@@ -240,8 +237,13 @@ void DLListAfter(DLList L, char *it)
 
     /* insert this node */
     if (L->curr == L->last) {
-        /* the current node is the first node */
+        /* the current node is the last node */
         L->last = new;
+    }
+    else{
+        // set up the link for the next items
+        new->next = L->curr->next;
+        L->curr->next->prev= new;
     }
     // set the link
     L->curr->next = new;
