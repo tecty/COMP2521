@@ -1,0 +1,8 @@
+Input	Initial	 Has	Number	Avg Time	Avg Time	Avg Time
+size	Order	 Dup.	of runs	of sortA	of sortB	for sort
+95000	random 	 no	10	15.727765	4.581500	0.066778	
+95000	sorted 	 no	10	14.496000	14.078400	0.037200	
+95000	reverse	 no	10	13.792700	13.351700	0.039000	
+100000	random 	 no	10	16.100200	0.037700	0.081000	
+100000	sorted 	 no	10	16.077000	15.600300	0.038100	
+100000	reverse	 no	10	15.293600	14.805600	0.041300	
