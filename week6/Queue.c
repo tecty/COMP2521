@@ -62,6 +62,10 @@ void enterQueue (Queue q, Item it)
    if (q->head == NULL) {
       q->head = n; 
    }
+   q->size++;
+   if (q->tail!= NULL) {
+        q->tail->next = n;  
+   }
    q->tail = n;
 }
 
@@ -92,6 +96,7 @@ void showQueue(Queue q)
    curr = q->head;
    while (curr != NULL) {
       printf(" %02d", curr->item);
+      curr= curr->next;
    }
    printf(" T\n");
 }
