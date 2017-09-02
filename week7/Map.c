@@ -140,9 +140,20 @@ int numE(Map g, TransportID type)
 // Returns 0 if no direct connection (i.e. not adjacent in graph)
 int connections(Map g, LocationID start, LocationID end, TransportID type[])
 {
-   assert(g != NULL);
-   // TODO: complete this fucntion
-   return 0;  // to keep the compiler happy
+    assert(g != NULL);
+    // count for valid connections
+    int index = 0;
+    for (VList this = g->connections[start]; this != NULL; this = this->next) {
+        // read throught all the item in the connections list of start loaction
+        if (this->v == end ) {
+            // this is the node from start to end 
+            type[index]= this->type;
+            index ++;
+        } 
+        
+    } 
+    
+    return index;  // to keep the compiler happy
 }
 
 // Add edges to Graph representing map of Europe

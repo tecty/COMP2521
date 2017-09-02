@@ -108,12 +108,29 @@ int idToType(LocationID p)
 // given a Place name, return its ID number
 int nameToID(char *name)
 {
-   int i;
-   for (i = MIN_MAP_LOCATION; i <= MAX_MAP_LOCATION; i++) {
-      if (strcmp(name,places[i].name) == 0)
-         return places[i].id;
-   }
-   return NOWHERE;
+   //int i;
+   // assign the lo and hi for bts
+   int lo = MIN_MAP_LOCATION, hi  = MAX_MAP_LOCATION;
+    while (lo< hi){
+        int mid = lo + (hi- lo)/2 ;
+        if (strcmp(name,places[mid].name)>0) {
+            lo = mid;
+        }
+        else if (strcmp(name,places[mid].name)==0) {
+            return places[mid].id;
+        }
+        else {
+            hi = mid;
+        }
+
+    }
+    //for (i = MIN_MAP_LOCATION; i <= MAX_MAP_LOCATION; i++) {
+    //  if (strcmp(name,places[i].name) == 0)
+    //     return places[i].id;
+    //}
+    
+    // else: didn't find the place
+    return NOWHERE;
 }
 
 // given a Place abbreviation (2 char), return its ID number
