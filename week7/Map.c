@@ -146,13 +146,27 @@ int connections(Map g, LocationID start, LocationID end, TransportID type[])
     for (VList this = g->connections[start]; this != NULL; this = this->next) {
         // read throught all the item in the connections list of start loaction
         if (this->v == end ) {
-            // this is the node from start to end 
+            // this is the node from start to end
             type[index]= this->type;
+
             index ++;
-        } 
-        
-    } 
-    
+        }
+        else if (this->type == BOAT) {
+            /* SO this can be access throught the boat */
+            // try to search the location of destinay by boat
+            for (VList sea = g->connections[this->v]; sea != NULL; sea = sea->next) {
+                /* search every node of this sea */
+                if (sea->v == end && (isLand(start)&& isLand(end)&& isSea(sea->v))) {
+                    /* find the end location can access by boat */
+                    type[index] = BOAT;
+                    index ++;
+                    break;
+                }
+            }
+        }
+
+    }
+
     return index;  // to keep the compiler happy
 }
 
