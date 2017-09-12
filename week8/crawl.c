@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 	char buffer[BUFSIZE];
 	char baseURL[BUFSIZE];
 	char firstURL[BUFSIZE];
-	char next[BUFSIZE];
+	char *next;
 	int  maxURLs;
 
 	if (argc > 2) {
@@ -59,25 +59,62 @@ int main(int argc, char **argv)
 	//    close the opened URL
 	//    sleep(1)
 	// }
-	if (!(handle = url_fopen(firstURL, "r"))) {
-		fprintf(stderr,"Couldn't open %s\n", next);
-		exit(1);
+	
+	// initial the graph
+	Graph *page_graph = newGraph(maxURLs);
+	
+	// allocat the string printer array with all 0 initialised
+	int *visited = calloc(maxURLs,sizeof(char *)); 
+	
+	
+	// initial the page queue to maintain
+	Queue page_q = newQueue()
+	// input the first page to queue to visit
+	enterQueue(page_q, firstURL);
+	// set the firstURL as a visited vertex
+	
+	
+	// loop till all the page have been touch
+	while(!emptyQueue(page_q)){
+	    // get the page should visit into next;
+	    next = leaveQueue(page_q);
+	    
+	    
+	
+	    // try to open all the link in the queue
+	    if (!(handle = url_fopen(next, "r"))) {
+		    fprintf(stderr,"Couldn't open %s\n", next);
+		    exit(1);
+	    }
+	    
+	    
+	    while(!url_feof(handle)) {
+		    url_fgets(buffer,sizeof(buffer),handle);
+		    //fputs(buffer,stdout);
+		    int pos = 0;
+		    char result[BUFSIZE];
+		    memset(result,0,BUFSIZE);
+		    while ((pos = GetNextURL(buffer, firstURL, result, pos)) > 0) {
+			    printf("Found: '%s'\n",result);
+			    memset(result,0,BUFSIZE);
+		    }
+	    }
+        // ending part
+	    url_fclose(handle);
+
+	    
+	    sleep(1);
+	    
+	    
+	
 	}
-	while(!url_feof(handle)) {
-		url_fgets(buffer,sizeof(buffer),handle);
-		//fputs(buffer,stdout);
-		int pos = 0;
-		char result[BUFSIZE];
-		memset(result,0,BUFSIZE);
-		while ((pos = GetNextURL(buffer, firstURL, result, pos)) > 0) {
-			printf("Found: '%s'\n",result);
-			memset(result,0,BUFSIZE);
-		}
-	}
-	url_fclose(handle);
-	sleep(1);
+	
+	
+	
 	return 0;
 }
+
+
 
 // setFirstURL(Base,First)
 // - sets a "normalised" version of Base as First
