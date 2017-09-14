@@ -60,7 +60,7 @@ void showQueue(Queue Q)
 	printf("\n");
 }
 
-// add item at end of Queue 
+// add item at end of Queue
 void QueueJoin(Queue Q, Item it)
 {
 	assert(Q != NULL);
@@ -94,4 +94,3 @@ int QueueIsEmpty(Queue Q)
 {
 	return (Q->head == NULL);
 }
-

@@ -96,10 +96,87 @@ void showGraph(Graph g, char **names)
 	}
 }
 
+// clear all the information in the Queue
+void cleanQueue(Queue q){
+    while (!QueueIsEmpty(q)) {
+        /* leave all the information in the queue */
+        QueueLeave(q);
+    }
+}
+
+
+// handy function to manipulate the route
+Queue dupQueue(Queue dest, Queue src){
+    // duplicate the content in the src to dest
+
+
+}
+
+// a method to store the path, by using the bfs, the max path would be sorte
+// is 30, prevent some overhead, seted 35
+// using the queue structure to record the path
+Queue route[35];
+// index currently occupied route
+int route_occupy[35]={0};
+
+int findEmptyRoute(){
+    int i =0;
+    for (i = 0; i < 35; i++) {
+        /* serch in route_occupy array */
+        if (route_occupy[i]==0) {
+            /* this route is empty */
+            return i;
+        }
+    }
+    // couldn't found a empty route
+    // kill the programme
+    fprintf(stderr, "coudln't find a empty route to store\n" );
+    for ( i = 0; i < 35; i++) {
+        /* print all the current path state */
+        showQueue(route[i]);
+    }
+    // end the programme
+    exit(1);
+}
+
+
 // find a path between two vertices using breadth-first traversal
 // only allow edges whose weight is less than "max"
 int findPath(Graph g, Vertex src, Vertex dest, int max, int *path)
 {
-	assert(g != NULL);
+    // have to have these variables
+    assert(g != NULL);
+    // record the path for visited palces
+    int visited[30];
+
+    // create a queue to do BFS
+    Queue route_q = newQueue();
+
+
+
+
+
+    // handy vars for loop
+    int i, j ,k;
+    // initial all the path
+    for (i = 0; i <30; i++){
+        route[i] = newQueue();
+    }
+
+
+    // i don't want to confuse my self by Vertex and Item
+    int this_place;
+
+    // try to find a path by BFS
+    while((path_id = QueueLeave(route_q))!= -1){
+
+
+
+
+    }
+
+    // free the memory of Queue
+    dropQueue(place_q);
+    // couldn't find a path
 	return 0; // never find a path ... you need to fix this
 }
