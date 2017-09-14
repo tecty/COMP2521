@@ -9,6 +9,8 @@
 
 #define strEQ(g,t) (strcmp((g),(t)) == 0)
 
+/*
+// duplicate things that complete in graph.h 
 typedef unsigned char Num;
 
 typedef struct GraphRep {
@@ -29,7 +31,7 @@ void  showGraph(Graph,int);
 
 static int vertexID(char *, char **, int);
 int addVertex(char *, char **, int);
-
+*/
 // newGraph()
 // - create an initially empty Graph
 Graph newGraph(int maxV)
@@ -113,6 +115,8 @@ int nVertices(Graph g)
 	return (g->nV);
 }
 
+
+
 // showGraph(Graph)
 // - display Graph
 void showGraph(Graph g, int mode)
@@ -130,6 +134,43 @@ void showGraph(Graph g, int mode)
 				putchar('\n');
 			}
 		}
+		else if (mode == 2){
+		
+		    //new mode for json output
+            printf("{");	
+            
+            //print the node
+            printf("\"nodes\": [\n");
+            int i,j;
+            for (i =0; i < g->nV; i++ ){
+                printf("\t{\"id\": \"n%d\", \"label\": \"%s\" },\n", i,g->vertex[i]);
+            }
+    	    printf("],\n");
+		    //end print node
+
+
+
+		    //print the edges
+            printf("\"edges\": [\n");
+            int edge_count = 0;
+            for (i =0; i < g->nV;i++ ){
+                for(j = 0; j<g->nV; j++){
+                    if(g->edges[i][j]){
+                        // print the edges by json style
+                        printf("\t{\"id\": \"e%d\", \"source\": \"n%d\", \"target\": \"n%d\" },\n", edge_count,i,j);
+                        edge_count++;
+                    }
+                    
+                }
+                
+            }
+            
+    	    printf("]");
+		    //end print edge
+		    
+		    printf("}\n");		    
+		
+		}
 		else {
 			for (i = 0; i < g->nV; i++) {
 				printf("Vertex: %s\n", g->vertex[i]);
@@ -144,6 +185,7 @@ void showGraph(Graph g, int mode)
 }
 
 // Helper functions
+
 
 // vertexID(Str,Names,N)
 // - searches for Str in array of Names[N]

@@ -15,4 +15,15 @@ int   nVertices(Graph);
 int   isConnected(Graph, char *, char *);
 void  showGraph(Graph,int);
 
+// addon things
+typedef unsigned char Num;
+typedef struct GraphRep {
+	int   nV;
+	int   maxV;
+	char  **vertex;
+	Num   **edges;
+} GraphRep;
+
+static int vertexID(char *, char **, int);
+int addVertex(char *, char **, int);
 #endif

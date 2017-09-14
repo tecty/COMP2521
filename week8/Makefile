@@ -1,7 +1,7 @@
 # Makefile for COMP1917 15s2 Week 08 Lab
 
 CC=gcc
-CFLAGS=-Wall -Werror -g
+CFLAGS=-Wall -Werror -g 
 LIBS=url_file.o html.o set.o queue.o graph.o stack.o
 TESTS=ts tq tk tg
 

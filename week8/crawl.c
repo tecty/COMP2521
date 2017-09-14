@@ -7,7 +7,8 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <curl/curl.h>
-#include "stack.h"
+//#include "stack.h"
+#include "queue.h"
 #include "set.h"
 #include "graph.h"
 #include "html.h"
@@ -15,9 +16,15 @@
 
 #define BUFSIZE 1024
 
+// urls for visited pages
+int  visited;
+// count for the visited pages 
+int page_count = 0;
+
+
 void setFirstURL(char *, char *);
 void normalise(char *, char *, char *, char *, int);
-
+int isHtml(char *url);
 int main(int argc, char **argv)
 {
 	URL_FILE *handle;
@@ -61,21 +68,22 @@ int main(int argc, char **argv)
 	// }
 	
 	// initial the graph
-	Graph *page_graph = newGraph(maxURLs);
+	Graph page_graph = newGraph(maxURLs);
 	
-	// allocat the string printer array with all 0 initialised
-	int *visited = calloc(maxURLs,sizeof(char *)); 
-	
+
+
 	
 	// initial the page queue to maintain
-	Queue page_q = newQueue()
+	Queue page_q = newQueue();
 	// input the first page to queue to visit
 	enterQueue(page_q, firstURL);
 	// set the firstURL as a visited vertex
+	addVertex(firstURL,page_graph->vertex, page_graph->nV);
+	
 	
 	
 	// loop till all the page have been touch
-	while(!emptyQueue(page_q)){
+	while(!emptyQueue(page_q)&& page_graph->nV <= maxURLs){
 	    // get the page should visit into next;
 	    next = leaveQueue(page_q);
 	    
@@ -90,18 +98,41 @@ int main(int argc, char **argv)
 	    
 	    while(!url_feof(handle)) {
 		    url_fgets(buffer,sizeof(buffer),handle);
-		    //fputs(buffer,stdout);
+
+
 		    int pos = 0;
 		    char result[BUFSIZE];
 		    memset(result,0,BUFSIZE);
 		    while ((pos = GetNextURL(buffer, firstURL, result, pos)) > 0) {
-			    printf("Found: '%s'\n",result);
+                // check whether the result page is visited
+                // and check whether it is a html page
+                if (vertexID(result,
+                    page_graph->vertex,page_graph->nV )<0
+                    && isHtml(result)
+                    ){
+                    // this page is not visited 
+                    // the the page to be scan 
+                    enterQueue(page_q, result);
+                    // print this addr out show that it's not visited 
+                    printf("Found: '%s'\n",result);
+                }
+                    
+                 
+                
+                // add the edge in to graph 
+                addEdge(page_graph, next, result);
+                
+                
+                
+
+			    
 			    memset(result,0,BUFSIZE);
 		    }
 	    }
         // ending part
 	    url_fclose(handle);
-
+        // free the space used in next string, to prevent memleak
+        free(next);
 	    
 	    sleep(1);
 	    
@@ -110,11 +141,30 @@ int main(int argc, char **argv)
 	}
 	
 	
-	
+	showGraph(page_graph,2);
 	return 0;
 }
 
+// check where a page is a html page
+int isHtml(char *url){
+    int len = strlen(url);
+    if (url[len-5] == '.' &&
+        url[len-4] == 'h' &&
+        url[len-3] == 't' &&
+        url[len-2] == 'm' &&
+        url[len-1] == 'l' 
+    )
+    return 1;
+    if (url[len-4] == '.' &&
+        url[len-3] == 'h' &&
+        url[len-2] == 't' &&
+        url[len-1] == 'm' 
+    )
+    return 1;
+    // else:
+    return 0;
 
+}
 
 // setFirstURL(Base,First)
 // - sets a "normalised" version of Base as First
@@ -135,4 +185,16 @@ void setFirstURL(char *base, char *first)
 		strcpy(first,base);
 		strcat(first,"/index.html");
 	}
+}
+
+
+// vertexID(Str,Names,N)
+// - searches for Str in array of Names[N]
+// - returns index of Str if found, -1 if not
+static int vertexID(char *str, char **names, int N)
+{
+	int i;
+	for (i = 0; i < N; i++)
+		if (strcmp(str,names[i]) ==0) return i;
+	return -1;
 }
