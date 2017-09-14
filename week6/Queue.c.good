@@ -7,35 +7,35 @@
 
 typedef struct QueueNode *Link;
 
-struct QueueNode {
-   Item item;
-   Link next;
+struct QueueNode { 
+   Item item; 
+   Link next; 
 };
 
-struct QueueRep {
-   Link head;
+struct QueueRep { 
+   Link head; 
    Link tail;
-   int  size;
+   int  size; 
 };
 
 // private function for creating list nodes
 static Link createNode(Item item)
-{
+{ 
    Link n = malloc(sizeof(struct QueueNode));
    assert(n != NULL);
-   n->item = item;
-   n->next = NULL;
-   return n;
+   n->item = item; 
+   n->next = NULL;    
+   return n;                   
 }
 
 // create an initially empty Queue
 Queue createQueue(void)
 {
    Queue q = malloc(sizeof(struct QueueRep));
-   assert(q != NULL);
-   q->head = NULL;
+   assert(q != NULL); 
+   q->head = NULL; 
    q->tail = NULL;
-   q->size = 0;
+   q->size = 0; 
    return q;
 }
 
@@ -56,14 +56,16 @@ void dropQueue(Queue q)
 
 // add new Item to the tail of the Queue
 void enterQueue (Queue q, Item it)
-{
+{ 
    assert(q != NULL);
    Link n = createNode(it);
    if (q->head == NULL) {
-      q->head = n;
+      q->head = n; 
    }
-   q->size ++;
-   //if ()
+   q->size++;
+   if (q->tail!= NULL) {
+        q->tail->next = n;  
+   }
    q->tail = n;
 }
 
@@ -72,18 +74,18 @@ Item leaveQueue (Queue q)
 {
    assert(q != NULL);
    Item it = q->head->item;
-   Link delNode = q->head;
+   Link delNode = q->head; 
    q->head = q->head->next;
    free(delNode);
-   q->size--;
+   q->size--;  
    return it;
 }
 
 // return count of Items in Queue
 int queueLength(Queue q)
-{
+{ 
    assert(q != NULL);
-   return q->size;
+   return q->size; 
 }
 
 // display Queue as list of 2-digit numbers
@@ -94,6 +96,7 @@ void showQueue(Queue q)
    curr = q->head;
    while (curr != NULL) {
       printf(" %02d", curr->item);
+      curr= curr->next;
    }
    printf(" T\n");
 }
