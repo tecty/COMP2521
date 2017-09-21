@@ -168,8 +168,10 @@ int findPath(Graph g, Vertex src, Vertex dest, int max, int *path)
     int this_place;
 
     // try to find a path by BFS
-    while((path_id = QueueLeave(route_q))!= -1){
+    while(QueueIsEmpty(route_q)){
+        path_id = QueueLeave(route_q);
 
+        route[path_id]
 
 
 
