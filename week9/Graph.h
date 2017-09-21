@@ -7,15 +7,6 @@
 #include <stdio.h>
 
 
-typedef struct QueueNode {
-	Item value;
-	struct QueueNode *next;
-} QueueNode;
-
-typedef struct QueueRep {
-	QueueNode *head;  // ptr to first node
-	QueueNode *tail;  // ptr to last node
-} QueueRep;
 // graph representation is hidden
 typedef struct GraphRep *Graph;
 

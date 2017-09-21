@@ -6,6 +6,15 @@
 
 #include "Item.h"
 
+typedef struct QueueNode {
+	Item value;
+	struct QueueNode *next;
+} QueueNode;
+
+typedef struct QueueRep {
+	QueueNode *head;  // ptr to first node
+	QueueNode *tail;  // ptr to last node
+} QueueRep;
 typedef struct QueueRep *Queue;
 
 Queue newQueue(); // create new empty queue
