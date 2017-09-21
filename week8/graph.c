@@ -154,7 +154,7 @@ void showGraph(Graph g, int mode)
             printf("\"edges\": [\n");
             int edge_count = 0;
             for (i =0; i < g->nV;i++ ){
-                for(j = 0; j<g->nV; j++){
+                for(j = i; j<g->nV; j++){
                     if(g->edges[i][j]){
                         // print the edges by json style
                         printf("\t{\"id\": \"e%d\", \"source\": \"n%d\", \"target\": \"n%d\" },\n", edge_count,i,j);

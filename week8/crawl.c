@@ -95,20 +95,29 @@ int main(int argc, char **argv)
 		    exit(1);
 	    }
 	    
-	    
+	    printf("opening %s \n",next);
 	    while(!url_feof(handle)) {
 		    url_fgets(buffer,sizeof(buffer),handle);
 
-
+            
 		    int pos = 0;
 		    char result[BUFSIZE];
 		    memset(result,0,BUFSIZE);
-		    while ((pos = GetNextURL(buffer, firstURL, result, pos)) > 0) {
+           
+   	    
+		    while ((pos = GetNextURL(buffer, next, result, pos)) > 0) {
+                
+                if (!strstr(result,"unsw.edu.au")){
+                    //this link doesn't belong to the unsw
+                    continue;
+                }
+                
+   
                 // check whether the result page is visited
                 // and check whether it is a html page
                 if (vertexID(result,
                     page_graph->vertex,page_graph->nV )<0
-                    && isHtml(result)
+                    && NormalizeURL(result)
                     ){
                     // this page is not visited 
                     // the the page to be scan 

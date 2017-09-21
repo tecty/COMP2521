@@ -1,0 +1,72 @@
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/index.html 
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/C.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/D.html'
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A.html 
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/index.html'
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B.html 
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/index.html'
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/C.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/D.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/index.html 
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A1.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A2.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A3.html'
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/index.html 
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B1.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B2.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B3.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B4.html'
+Found: 'http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B5.html'
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A1.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A2.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A3.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B1.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B2.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B3.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B4.html 
+opening http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B5.html 
+Graph has 15 vertices:
+{"nodes": [
+	{"id": "n0", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/index.html" },
+	{"id": "n1", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A.html" },
+	{"id": "n2", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B.html" },
+	{"id": "n3", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/C.html" },
+	{"id": "n4", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/D.html" },
+	{"id": "n5", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/index.html" },
+	{"id": "n6", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/index.html" },
+	{"id": "n7", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A1.html" },
+	{"id": "n8", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A2.html" },
+	{"id": "n9", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/A/A3.html" },
+	{"id": "n10", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B1.html" },
+	{"id": "n11", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B2.html" },
+	{"id": "n12", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B3.html" },
+	{"id": "n13", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B4.html" },
+	{"id": "n14", "label": "http://www.cse.unsw.edu.au/~cs2521/17s2/mini-web/B/B5.html" },
+],
+"edges": [
+	{"id": "e0", "source": "n0", "target": "n1" },
+	{"id": "e1", "source": "n0", "target": "n2" },
+	{"id": "e2", "source": "n0", "target": "n3" },
+	{"id": "e3", "source": "n0", "target": "n4" },
+	{"id": "e4", "source": "n1", "target": "n0" },
+	{"id": "e5", "source": "n1", "target": "n5" },
+	{"id": "e6", "source": "n2", "target": "n0" },
+	{"id": "e7", "source": "n2", "target": "n6" },
+	{"id": "e8", "source": "n3", "target": "n0" },
+	{"id": "e9", "source": "n3", "target": "n1" },
+	{"id": "e10", "source": "n3", "target": "n2" },
+	{"id": "e11", "source": "n3", "target": "n4" },
+	{"id": "e12", "source": "n5", "target": "n7" },
+	{"id": "e13", "source": "n5", "target": "n8" },
+	{"id": "e14", "source": "n5", "target": "n9" },
+	{"id": "e15", "source": "n6", "target": "n10" },
+	{"id": "e16", "source": "n6", "target": "n11" },
+	{"id": "e17", "source": "n6", "target": "n12" },
+	{"id": "e18", "source": "n6", "target": "n13" },
+	{"id": "e19", "source": "n6", "target": "n14" },
+	{"id": "e20", "source": "n7", "target": "n5" },
+	{"id": "e21", "source": "n8", "target": "n5" },
+	{"id": "e22", "source": "n9", "target": "n5" },
+]}

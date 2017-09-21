@@ -59,6 +59,72 @@ Return: Position of the URL found
 
 */
 
+int relativeUrl(char *this_page, char *dest){
+    // because while passed in url start is '.', only deal with the situation have . 
+    // count how much it should go to up folder
+    // bugs
+    
+    int prev_dir = 0;
+    char src[1024];
+    strcpy(src,this_page);
+    char *last_index = dest;
+    
+    
+    //printf("actual_link %s\n",last_index);
+    // push the last_index forward by search 'previous folder'
+    while (strstr(last_index,"../")){
+        // increament the search_index
+        
+        last_index = 3+strpbrk(last_index,"../");
+        
+        //printf("actual_link %s\n",last_index);
+        // increament the count
+        prev_dir ++;    
+    }
+    //printf("actual_link %s\n",last_index);
+    // push the last_index forward by search 'this folder'
+    while (strstr(last_index,"../")){
+        // increament the last index
+        last_index =2+strpbrk(last_index,"./");
+ 
+    }
+    
+    // start from the end of the string, try to retreat back
+    int src_index = (int) strlen(src);
+    for(;src_index>0 && prev_dir>0; src_index --){
+        if(src[src_index]=='/'){
+            // here is a directory
+            prev_dir --;
+        }
+    }
+    // recalculate the offset
+    src_index +=2;
+    
+    //printf("dir part: %s\n",src+src_index);
+    if (prev_dir>0){
+        // unsuccessful deal with this directory
+        return -1;
+    }
+    printf("actual_link %s\n",last_index);
+    // delete the string after that folder at src
+    src[src_index]= '\0';
+    printf("folder_link %s\n",src);
+    src_index += strlen(last_index);
+    //printf("src index = %d, length of actual link = %d\n", src_index, strlen(last_index));
+    strncat(src,last_index,strlen(last_index));
+    src[src_index]='\0';
+    // clear the dest array
+    memset(dest,0,1024);
+    
+    strncat(dest, src,src_index);    
+    printf("final link: %s\n", dest);
+        
+    return strlen(dest);
+
+}
+
+
+
 int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
 {
   char c;
@@ -89,6 +155,9 @@ int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
     // check for equals first... some HTML tags don't have quotes...or use single quotes instead
     p1 = strchr(&(html[pos+1]), '=');
     
+    // Tecty !
+    // dont understand this, in bootstrap it's possible to have this long a tag
+    // <a class="btn btn-outline-primary" href="link"></a>
     if ((!p1) || (*(p1-1) == 'e') || ((p1 - html - pos) > 10)) {
       // keep going...
       return GetNextURL(html,urlofthispage,result,pos+1);
@@ -117,12 +186,25 @@ int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
     } else {
       //! We find a URL. HTML is a terrible standard. So there are many ways to present a URL.
       if (p1[0] == '.') {
-        //! Some URLs are like <a href="../../../a.txt"> I cannot handle this. 
-	// again...probably good to recursively keep going..
-	// NEW
+        //! Some URLs are like <a href="../../../a.txt"> I cannot handle this.
         
-        return GetNextURL(html,urlofthispage,result,pos+1);
-	// /NEW
+        pos = pos + (int)(p2-p1);
+        
+        // pretend this is a good url.
+        strncpy(result, p1, (p2-p1)); 
+        // call my function to deal with this url
+        int len = 0;
+        if((len =relativeUrl(urlofthispage, result))>0){
+            // success acess the url
+            return len;
+            //printf("imhere\n");
+            //return GetNextURL(html,urlofthispage,result,pos+1);
+        }
+        else {
+            return GetNextURL(html,urlofthispage,result,pos+1);
+        } 
+        
+        
       }
       if (p1[0] == '/') {
         //! this means the URL is the absolute path
