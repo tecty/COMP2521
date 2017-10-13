@@ -1,13 +1,21 @@
 #!/bin/sh
 
-size=200
+size=5000
 
 for insert in L A B R S V
 do
-	for order in A
-	do
-		echo ""
-		echo "Test: ./tlab $size $order $insert"
-		echo "t" | ./tlab $size $order $insert | grep -v Tree
-	done
+	for order in A P R
+    do
+        for (( seed = 0; seed < 10; seed++ )); do
+
+            echo ""
+            echo "Test: ./tlab $size $order $insert"
+            echo "t" | ./tlab $size $order $insert | grep "#nodes" >> record.tmp
+        done
+        # use the record to calculate
+
+        # remove the record file
+        rm record.tmp
+
+    done
 done
