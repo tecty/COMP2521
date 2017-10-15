@@ -1,0 +1,12 @@
+hasPath, From: 6 , To: 7 
+
+Edge inserted:  2 -> 7 
+Edge inserted:  1 -> 6 
+Edge inserted:  4 -> 2 
+Edge inserted:  2 -> 5 
+Edge inserted:  5 -> 1 
+Edge inserted:  1 -> 2 
+
+
+hasPath: 0 
+

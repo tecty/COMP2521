@@ -1,0 +1,10 @@
+hasPath, From: 1 , To: 4 
+
+Edge inserted:  2 -> 4 
+Edge inserted:  1 -> 2 
+Edge inserted:  4 -> 3 
+Edge inserted:  2 -> 5 
+
+
+hasPath: 1 
+
