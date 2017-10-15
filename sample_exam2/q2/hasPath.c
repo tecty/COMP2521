@@ -25,71 +25,71 @@
 
 int *visited;  // array of visited
 
-
-typedef struct node_t {
-    int val;
-    struct node_t *next;
-} *node;
-
-typedef struct queue_t {
-    node head;
-    node tail;
-} *queue;
-
-node init_node(int val){
-    node new = malloc(sizeof(struct node_t));
-    assert(new != NULL);
-
-    // initial the value in the node
-    new->val = val;
-    new->next = NULL;
-}
-
-queue init_queue(){
-    queue new = malloc(sizeof(struct queue_t));
-
-    // initial the value in the queue
-    new ->head = new->tail = NULL;
-    return new;
-}
-
-
-int leave_q(queue q){
-    // pop the node in the queue
-    if (q->head == NULL) {
-        /* the queue is empty */
-        return -1;
-    }
-    // else
-    int this = q->head->val;
-    queue delete = q->head;
-    // rearrange the queue's link
-    q->head = q->head-> next;
-    if (q->head == NULL) {
-        /* the last node is leaved the queue, the queue is empty now */
-        q->head = NULL;
-    }
-
-    // free the memory usage
-    free(delete);
-    // return the Vertex in the node
-    return this;
-}
-
-void join_q(queue q,int val){
-    // create a node to link
-    node this = init_node(val);
-    if (q->head == NULL) {
-        /* the queue is empty */
-        q->head = q->tail = this;
-    }
-    else{
-        // add one more at the end of the queues
-        q->tail->next = this;
-        // refresh the queue
-        q->tail = this;
-    }
-}
+//
+// typedef struct node_t {
+//     int val;
+//     struct node_t *next;
+// } *node;
+//
+// typedef struct queue_t {
+//     node head;
+//     node tail;
+// } *queue;
+//
+// node init_node(int val){
+//     node new = malloc(sizeof(struct node_t));
+//     assert(new != NULL);
+//
+//     // initial the value in the node
+//     new->val = val;
+//     new->next = NULL;
+// }
+//
+// queue init_queue(){
+//     queue new = malloc(sizeof(struct queue_t));
+//
+//     // initial the value in the queue
+//     new ->head = new->tail = NULL;
+//     return new;
+// }
+//
+//
+// int leave_q(queue q){
+//     // pop the node in the queue
+//     if (q->head == NULL) {
+//         /* the queue is empty */
+//         return -1;
+//     }
+//     // else
+//     int this = q->head->val;
+//     queue delete = q->head;
+//     // rearrange the queue's link
+//     q->head = q->head-> next;
+//     if (q->head == NULL) {
+//         /* the last node is leaved the queue, the queue is empty now */
+//         q->head = NULL;
+//     }
+//
+//     // free the memory usage
+//     free(delete);
+//     // return the Vertex in the node
+//     return this;
+// }
+//
+// void join_q(queue q,int val){
+//     // create a node to link
+//     node this = init_node(val);
+//     if (q->head == NULL) {
+//         /* the queue is empty */
+//         q->head = q->tail = this;
+//     }
+//     else{
+//         // add one more at the end of the queues
+//         q->tail->next = this;
+//         // refresh the queue
+//         q->tail = this;
+//     }
+// }
 
 //
 //
