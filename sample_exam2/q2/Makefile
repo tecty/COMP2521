@@ -1,7 +1,7 @@
 # COMP2521 17s2; Question: hasPath
 
 CC=gcc
-CFLAGS=-Wall -Werror -lm 
+CFLAGS=-std=c99 -Wall -Werror -lm 
 
 all: testHasPath
 

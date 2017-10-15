@@ -156,14 +156,10 @@ int *visited;  // array of visited
 // }
 
 
-int doHasPath(Graph g, Vertex src, Vertex dests) {
+int doHasPath(Graph g, Vertex src, Vertex dest ) {
     /* code */
     for (int v = 0; v < g->nV; v++) {
         /* code */
-        if (v == dest) {
-            /* destination is found */
-            return 1;
-        }
         if (adjacent(g,src,v)) {
             /* src and v is neighbour */
             if (visited[v]) {
@@ -171,6 +167,10 @@ int doHasPath(Graph g, Vertex src, Vertex dests) {
                 continue;
             }
             visited[v] = 1;
+        if (v == dest) {
+            /* destination is found */
+            return 1;
+        }
             if(doHasPath(g, v, dest)){
                 // the child is found the node
                 return 1;
@@ -178,6 +178,8 @@ int doHasPath(Graph g, Vertex src, Vertex dests) {
             // else continue searing;
         }
     }
+    // not found any node by searching 
+    return 0;
 }
 
 
@@ -185,7 +187,7 @@ int hasPath(Graph g, Vertex src, Vertex dest)
 {
     // malloc of visited
     visited = malloc(g->nV * sizeof(int));
-    for (size_t n = 0; n < g->nV; n`++`) {
+    for (size_t n = 0; n < g->nV; n++) {
         /* initial the array */
         visited[n] = 0;
     }
