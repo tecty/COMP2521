@@ -91,66 +91,105 @@ void join_q(queue q,int val){
     }
 }
 
+//
+//
+// int hasPath(Graph g, Vertex src, Vertex dest)
+// {
+//
+// 	// Implement this function,
+// 	// also change the return value below!
+//
+//     // special situation
+//     if (dest == src) {
+//         /* the node can reach itself ? */
+//         return 1;
+//     }
+//     if (g == NULL) {
+//         /* not provided Graph */
+//         return 0;
+//     }
+//
+//
+//     // initial the array of visited
+//     visited = malloc(g->nV* sizeof(int));
+//     for (int i = 0; i < g->nV; i++) {
+//         /* initial the array with 0 */
+//         visited[i] = 0;
+//     }
+//
+//     // search for the Graph by bfs
+//     // initial the queue to store the vertices
+//     queue q = init_queue();
+//
+//     // join the first node to search
+//     join_q(q , src);
+//
+//     // current search v
+//     int v;
+//
+//     while ((v = leave_q(q))>=0) {
+//         /* search for all the vertices could reach by src */
+//         for (int to = 0; to < g->nV; to++) {
+//             /* All possible edges from v to to */
+//             if (adjacent(g, v, to)) {
+//                 /* here is an edge between v and to */
+//                 if (to == dest) {
+//                     /* the node(to) is the required node */
+//                     // successful found
+//                     return 1;
+//                 }
+//
+//                 if(visited[to]){
+//                     // this node is visited, not going to visit it again
+//                     // skip all the action to this node(to)
+//                     continue;
+//                 }
+//                 // else
+//                 // set this node to visited, because it would be search
+//                 visited[to] = 1;
+//                 // join the queue, to search after
+//                 join_q(q, to);
+//             }
+//         }
+//     }
+//    return 0;
+// }
+
+
+int doHasPath(Graph g, Vertex src, Vertex dests) {
+    /* code */
+    for (int v = 0; v < g->nV; v++) {
+        /* code */
+        if (v == dest) {
+            /* destination is found */
+            return 1;
+        }
+        if (adjacent(g,src,v)) {
+            /* src and v is neighbour */
+            if (visited[v]) {
+                /* code */
+                continue;
+            }
+            visited[v] = 1;
+            if(doHasPath(g, v, dest)){
+                // the child is found the node
+                return 1;
+            }
+            // else continue searing;
+        }
+    }
+}
 
 
 int hasPath(Graph g, Vertex src, Vertex dest)
 {
-
-	// Implement this function,
-	// also change the return value below!
-
-    // special situation
-    if (dest == src) {
-        /* the node can reach itself ? */
-        return 1;
-    }
-    if (g == NULL) {
-        /* not provided Graph */
-        return 0;
+    // malloc of visited
+    visited = malloc(g->nV * sizeof(int));
+    for (size_t n = 0; n < g->nV; n`++`) {
+        /* initial the array */
+        visited[n] = 0;
     }
 
-
-    // initial the array of visited
-    visited = malloc(g->nV* sizeof(int));
-    for (int i = 0; i < g->nV; i++) {
-        /* initial the array with 0 */
-        visited[i] = 0;
-    }
-
-    // search for the Graph by bfs
-    // initial the queue to store the vertices
-    queue q = init_queue();
-
-    // join the first node to search
-    join_q(q , src);
-
-    // current search v
-    int v;
-
-    while ((v = leave_q(q))>=0) {
-        /* search for all the vertices could reach by src */
-        for (int to = 0; to < g->nV; to++) {
-            /* All possible edges from v to to */
-            if (adjacent(g, v, to)) {
-                /* here is an edge between v and to */
-                if (to == dest) {
-                    /* the node(to) is the required node */
-                    // successful found
-                    return 1;
-                }
-
-                if(visited[to]){
-                    // this node is visited, not going to visit it again
-                    // skip all the action to this node(to)
-                    continue;
-                }
-                // else
-                // set this node to visited, because it would be search
-                visited[to] = 1;
-                // join the queue, to search after
-                join_q(q, to);
-            }
-        }
-    }
-   return 0;
+    // recursive to find the path
+    return doHasPath(g, src, dest);
 }
