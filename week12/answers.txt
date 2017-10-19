@@ -1,0 +1,83 @@
+a.
+Maximun lenth is 27
+More slots the words distribute widely,which can be indicate by more slots have 1 words.
+More slot is empty.
+
+b. Yes, the prime number of table size has less empty slot.
+400837 = 46997
+400000 = 53533
+
+857137 = 315778
+857144 = 317732
+
+c.
+./mkwords 13 | ./words - 7
+Reading words from stdin
+Hash Table Stats:
+Number of slots = 7
+Number of items = 13
+Chain length distribution
+  Length  #Chains
+       1        1
+       2        6
+Testing completed OK
+
+I have no confidence of this algorithm can have prefect result in large number.
+
+
+d. this must use cse machine
+
+
+e. must be 1, inserting every words would be a linear time.
+
+f. Use a better hash function. The key would distribute more evenly between
+every slot.
+Not use this kind of hash table, Use linear probing with double hashing. By my
+experiment in the assignment 2, the search is cost 1 hash most of times.
+Which is linear time. But that couldn't show in this stats collection way.
+
+
+g.
+OLD
+Reading words from stdin
+Hash Table Stats:
+Number of slots = 400837
+Number of items = 857144
+Chain length distribution
+  Length  #Chains
+       0    46997
+       1   100849
+       2   108595
+       3    76832
+       4    41324
+       5    17467
+       6     6268
+       7     1840
+       8      525
+       9      113
+      10       24
+      11        3
+Testing completed OK
+
+
+NEW
+Reading words from stdin
+Hash Table Stats:
+Number of slots = 400837
+Number of items = 857144
+Chain length distribution
+  Length  #Chains
+       0    47700
+       1   100610
+       2   108061
+       3    76860
+       4    40922
+       5    17596
+       6     6393
+       7     1976
+       8      552
+       9      125
+      10       30
+      11       11
+      12        1
+Testing completed OK

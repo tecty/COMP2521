@@ -1,31 +1,27 @@
 // HashTable.c ... implementation of HashTable ADT
 // Written by John Shepherd, May 2013
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
+
 #include "HashTable.h"
-#include "List.h"
 
-// Types and functions local to HashTable ADT
-
-typedef struct HashTabRep {
-	List *lists;  // either use this
-	int   nslots; // # elements in array
-	int   nitems; // # items stored in HashTable
-} HashTabRep;
 
 // convert key into index (from Sedgewick)
 unsigned int hash(Key k, int tableSize)
 {
-	unsigned int h = 0;
-	int a = 31415, b = 27183;
-	for (; *k != '\0'; k++) {
-		a = a*b % (tableSize-1);
-		h = (a*h + *k) % tableSize;
-	}
-	return (h % tableSize);
+    unsigned int h = 0;
+	unsigned int h2 = 0;
+	// int a = 31415, b = 27183;
+	// for (; *k != '\0'; k++) {
+	// 	a = a*b % (tableSize-1);
+	// 	h = (a*h + *k) % tableSize;
+	// }
+	// return (h % tableSize);
+    for (; *k != '\0'; k++) {
+        h = h*29 +( *k-'a');
+        h2 = (h2<<3) +( *k-'a');
+
+    }
+    return (h2+h) % tableSize;
 }
 
 
@@ -60,11 +56,35 @@ void HashTableStats(HashTable ht)
 {
 	assert(ht != NULL);
 	printf("Hash Table Stats:\n");
-	printf("Number of slots = %d\n",0); // TODO
-	printf("Number of items = %d\n",0); // TODO
+	printf("Number of slots = %d\n",ht->nslots);
+	printf("Number of items = %d\n",ht->nitems);
 	printf("Chain length distribution\n");
 	printf("%8s %8s\n","Length","#Chains");
-	// TODO .. rest of function to show length/freq pairs
+    // a very long table to count the length distribution
+    int len_count[100]= {0};
+    // record the maxlenth of list in the slot
+    int max_len = 0;
+
+    for (int i = 0; i < ht->nslots; i++) {
+        /* for every slot in the table */
+        int this_len = ListLength(ht->lists[i]);
+        len_count[this_len] ++;
+        if (this_len > max_len) {
+            /* refresh the maxlenth */
+            max_len = this_len;
+        }
+    }
+
+    // base on the maxlenth to print the statistic
+    for (int i = 0; i < max_len+1; i++) {
+        /* for every valid record in the len_count */
+        if (len_count[i] != 0) {
+            /* check whether this slot have things to print */
+            printf("%8d %8d\n",i,len_count[i]);
+        }
+    }
+
+
 }
 
 // insert a new value into a HashTable
@@ -93,4 +113,3 @@ Item *HashTableSearch(HashTable ht, Key k)
 	int i = hash(k, ht->nslots);
 	return ListSearch(ht->lists[i], k);
 }
-

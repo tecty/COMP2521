@@ -3,8 +3,20 @@
 
 #ifndef HASHTAB_H
 #define HASHTAB_H
-
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
 #include "Item.h"
+#include "List.h"
+
+// Types and functions local to HashTable ADT
+
+typedef struct HashTabRep {
+	List *lists;  // either use this
+	int   nslots; // # elements in array
+	int   nitems; // # items stored in HashTable
+} HashTabRep;
 
 typedef struct HashTabRep *HashTable;
 
