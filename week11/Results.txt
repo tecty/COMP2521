@@ -21,3 +21,7 @@ V         13/13        12        14/14        12        15/15        12
 
 
 Notes (what the above indicates):
+The Corse of the search is directly associate with the Depth of the tree. 
+spaning tree would decrease the tree's height by the operation expect insert, so it gain better and better performance for each search. But not the random search, due to the spaning tree would bring up the neighbour of the result, while the random search is no connection between this search and next search, so it doesn't decrease the height and didn't get a good performance.
+The leaf inseart in the ascending order is getting the worst tree, also in the insert at root. Random insert just the situation in between. 
+
