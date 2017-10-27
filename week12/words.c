@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	case 3: fname = argv[1]; size = atoi(argv[2]); break;
     default: fname = NULL; usage(argv[0]); break;
 	}
-	
+
     // access the word file
 	if (eq(fname,"-")) {
 		wordf = stdin;
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
         	printf("Can't open %s\n",fname);
         	exit(1);
     	}
-    	printf("Reading words from %s\n",fname);    
+    	printf("Reading words from %s\n",fname);
 	}
 
 	// build hash table, containing all words from file
