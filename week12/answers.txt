@@ -25,16 +25,20 @@ Testing completed OK
 I have no confidence of this algorithm can have prefect result in large number.
 
 
-d. this must use cse machine
-
+d.I notice that, for the same input, the different table size could impact
+the distribution of hash table which cause the differ of performance. If we 
+could found the suitable table size or the perfect hash function, we could 
+have a very well performance of the same table or data set.
 
 e. must be 1, inserting every words would be a linear time.
 
 f. Use a better hash function. The key would distribute more evenly between
-every slot.
+every slot. In the theory, for every given data set, there is a perfect hash 
+fucntion for that data, that would well  distribute the dataset. 
 Not use this kind of hash table, Use linear probing with double hashing. By my
 experiment in the assignment 2, the search is cost 1 hash most of times.
 Which is linear time. But that couldn't show in this stats collection way.
+
 
 
 g.

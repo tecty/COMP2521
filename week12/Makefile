@@ -1,7 +1,7 @@
 # COMP1927 15s2 Week 12 Lab
 
 CC=gcc
-CFLAGS=-Wall -Werror -pg
+CFLAGS=-std=gnu11 -Wall -Werror -pg
 
 all: words mkwords
 
