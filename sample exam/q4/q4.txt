@@ -1,0 +1,13 @@
+A.  1) lo > hi : Invalid range or not value to search in the array.
+    2) lo == hi: The last possible value that might equal to the require key.
+    3) lo < hi : Need to search in the range [lo, hi], reduce the size of range or the mid has the require key.
+
+B.  i.  2
+    ii. 4
+    iii.3
+
+C.  Smallest: 1
+    Biggest : 4
+
+D.  Smallest: 1
+    Biggest : upper bound of (log2(N))

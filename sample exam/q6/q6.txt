@@ -1,0 +1,7 @@
+A.  20  11  16  18
+B.  20  11  32  4   16  25  36  3   7   13  18  21  28  33  39
+C.  2^n
+D.  Root node: 32
+    Left Child: 20  Right Child: 36
+E.  Root node: 21
+    Left Child: 11  Right Child: 32

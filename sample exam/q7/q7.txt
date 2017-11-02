@@ -1,0 +1,11 @@
+A.  Root Node: 12, 35, 60
+    Contain Node: 1, 7, 8
+B.  Root Node: 36
+    Contain Node: 42
+C.  Root Node:  35
+    Parent Node:7
+D.  Root Node:  44
+    Parent Node:36
+E.  i.  1
+    ii. 2
+    iii.1
