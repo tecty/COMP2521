@@ -12,4 +12,4 @@ A.  Output the executable file which name is the following -- trav.
 B.  # gcc -c -o Graph.o Graph.c
     or: # gcc -c Graph.c
 
-C.  When you use (gdb) run to run the programme, the execution will stop when everytime the programme calling the myFun.
+C.  When you use (gdb) run to run the programme, the execution will stop when every time the programme calling the myFun.
