@@ -67,8 +67,32 @@ void ListAppend(List L, int value)
 	}
 }
 
+
 // ListReverse ... reverse a List
 void ListReverse(List L)
 {
-	// TODO
+    if (L == NULL || L->first == L -> last) {
+        /* the list is not exist or only have one or less node */
+        return;
+    }
+    // for record the tmp pointer of nodes
+    Link this_node, prev_node, tmp;
+    prev_node = L->first; this_node = prev_node->next;
+    prev_node ->next = NULL;
+    while (this_node != NULL) {
+        /* read throught the end of the link list */
+        // the node's next will be delete
+        tmp = this_node->next;
+        // link back
+        this_node->next = prev_node;
+        prev_node = this_node;
+        // restore the next node
+        this_node = tmp;
+    }
+
+    // reverse the first and last
+    this_node = L->first;
+    L->first = L ->last;
+    L->last  = this_node;
+
 }

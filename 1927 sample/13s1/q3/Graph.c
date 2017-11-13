@@ -113,9 +113,54 @@ void  removeE(Graph g, Edge e)
 	g->nE--;
 }
 
+// store the visited counter
+int *visited;
+
+int get_new_comp(int nV){
+    // getthing a new components
+    for (int i = 0; i < nV; i++) {
+        if (!visited[i]) {
+            /* this node is not visited */
+            return i;
+        }
+    }
+    // all vertices are visited
+    return -1;
+}
+
+void do_search(Graph g, int this){
+    // recursive search all the vertices can get from this Vertex
+    // set this Vertex is visited
+    visited[this] = 1;
+
+    for (int i = 0; i < g->nV; i++) {
+        /* search for all the neighbour of this Vertex */
+        if (g->edges[this][i] && !visited[i]) {
+            /* visit this Vertex */
+            do_search(g, i);
+        }
+    }
+
+
+}
+
 // nComponents ... number of connected components
 int nComponents(Graph g)
 {
-	// TODO
-	return 0; // remove this line
+	int nC = 0;
+    // initialise the array
+    visited = malloc(g->nV * sizeof(int));
+    for (int i = 0; i < g->nV; i++) {
+        // initialise the array with 0
+        visited[i] = 0;
+    }
+    // the enxt Vertex number
+    int next =0;
+    while ((next = get_new_comp(g->nV))!= -1) {
+        /* search for all the components */
+        do_search(g, next);
+        nC ++;
+    }
+
+	return nC; // remove this line
 }

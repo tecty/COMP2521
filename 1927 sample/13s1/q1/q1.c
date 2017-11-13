@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <assert.h>
 #define MAXARRAY 1000
 
 
@@ -39,5 +39,24 @@ int ArrayMax(int a[], int n)
 // recursive function to find maximum in a[lo..hi]
 int max(int a[], int lo, int hi)
 {
-	// TODO
+    // assert(lo > hi);
+    if (lo > hi ) {
+        /* code */
+        exit(0);
+    }
+    if (lo == hi) {
+        /* code */
+        return a[lo];
+    }
+    else {
+        int lo_num, hi_num;
+        lo_num = max(a,lo, ((lo + hi)/2));
+        hi_num = max(a,(lo + hi)/2+1, hi);
+        if (lo_num >= hi_num) {
+            /* code */
+            return lo_num;
+        }
+        else return hi_num;
+    }
+
 }
