@@ -7,14 +7,27 @@ Operation             State of Queue after operation
 
 initially             -
 PQueueJoin(PQ, 'X')
+X
 PQueueJoin(PQ, 'A')
+A->X
 PQueueJoin(PQ, 'J')
+A->J->X
 PQueueLeave(PQ)
+J->X
 PQueueJoin(PQ, 'K')
+J->K->X
 PQueueLeave(PQ)
+K->X
 PQueueLeave(PQ)
+X
 
 
 B.
 
-Replace this by your answer
+PQueueLeave(PQ):
+    The most priority element would be the list's head. 
+    Will be simply leave the first node (head) of the queue
+
+PQueueJoin(PQ, Element)
+    Join the Element by the correct position where the node have prev->value < Element next->value > Element
+    After knowing the correct position, arrange the link.

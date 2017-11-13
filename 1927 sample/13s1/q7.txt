@@ -7,19 +7,22 @@ Show the nodes as follows ...
 
 Node   Contents of Node
 
-A      (?)
+A      (7,12,17)
 B      (1, 3, 5)
-C      (?)
-D      (?)
+C      (10)
+D      (21,25,29)
 
 add any other nodes here
-
+neighbour of node C
+(14,15)
 
 B.
-
-Replace this by your answer
-
+??
+Every node (or implement in edges) has colour in black or red.
+Balanced tree with the height of depth(highest path) <= 2 depth(lowest path)
+Every insert, delete is O(log(n)).
+Search would have a stable O(n log(n))
 
 C.
 
-Replace this by your answer
+No every. but if all the node has size 3 or 1 would have unique tree. Because the 2 size node can have different choice of black node.   

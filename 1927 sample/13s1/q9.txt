@@ -2,15 +2,25 @@ Question 9 ... COMP1927 13s1 Final Exam
 
 
 A.
+a   b   c   d   e   f   g   h   i   j
+0   1   3   1   1   2   3   5   5   5
 
-Replace this by your answer
+a -> e -> d -> b -> g -> f -> c -> j -> i -> h
 
 
 B.
+a   b   c   d   e   f   g   h   i   j
+-   2       5   3
+-   -   5   3   3
+-   -   5   2   -   1
+-   -   5   -   -   -   7           3
+-   -   5   -   -   -   3   4   -   -
+-   -   2   -   -   -   -   4   -   -
+-   -   -   -   -   -   -   4   -   -
+-   -   -   -   -   -   -   -   -   -
 
-Replace this by your answer
-
+a -> b -> e -> f -> d -> j -> i -> g -> c -> h
 
 C. (bonus question)
 
-Replace this by your answer
+John Lions

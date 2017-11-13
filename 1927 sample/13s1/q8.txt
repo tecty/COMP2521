@@ -7,19 +7,19 @@ Draw the hash table as follows
 
 [i]   Content of hashTab[i]
 
-[0]   -
+[0]   26 -> 13
 [1]   -
 [2]   -
-[3]   -
-[4]   -
+[3]   3 -> 16 -> 29
+[4]   4
 [5]   -
 [6]   -
-[7]   -
+[7]   7 -> 20
 [8]   -
 [9]   -
 [10]  -
-[11]  -
-[12]  -
+[11]  25
+[12]  12
 
 
 
@@ -29,44 +29,45 @@ Draw the hash table as follows
 
 [i]   Content of hashTab[i]
 
-[0]   -
-[1]   -
+[0]   26
+[1]   13
 [2]   -
-[3]   -
-[4]   -
-[5]   -
-[6]   -
-[7]   -
-[8]   -
+[3]   3
+[4]   16
+[5]   4
+[6]   29
+[7]   7
+[8]   20
 [9]   -
 [10]  -
-[11]  -
-[12]  -
+[11]  25
+[12]  12
 
 
 C.
-
+??
 Draw the hash table as follows
 
 [i]   Content of hashTab[i]
 
-[0]   -
+[0]   26
 [1]   -
 [2]   -
-[3]   -
-[4]   -
+[3]   3
+[4]   4
 [5]   -
 [6]   -
-[7]   -
-[8]   -
-[9]   -
-[10]  -
-[11]  -
-[12]  -
+[7]   7
+[8]   16
+[9]   29
+[10]  20
+[11]  25
+[12]  12
 
 Draw linked lists as -> x -> y -> z
 
 
 D.
 
-Replace this by your answer
+The hashing would return the value as close as the (127 % N) when the string become longer and longer.
+The value would have a cluster on 0, all the value would be store near the slot 0.
